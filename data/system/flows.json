@@ -1,6 +1,14 @@
 {
   "flows": [
     {
+      "from": "co2-input",
+      "to": "processing-plant",
+      "type": "gas",
+      "label": "CO2 Gas",
+      "current": true,
+      "proposed": true
+    },
+    {
       "from": "chicken-house",
       "to": "processing-plant",
       "type": "manure",

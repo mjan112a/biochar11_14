@@ -85,40 +85,54 @@ export const iconMapping: IconMapping = {
     category: 'input',
     description: 'Fossil fuel representation'
   },
-  'co2': {
-    name: 'CO2 (dry ice)',
-    filename: 'co2-dry-ice.png',
-    path: `${ICON_BASE_PATH}/inputs/co2-dry-ice.png`,
+  'diesel': {
+    name: 'Diesel',
+    filename: 'dry-ice.png',
+    path: `${ICON_BASE_PATH}/inputs/dry-ice.png`,
     category: 'input',
-    description: 'CO2 for dry ice'
+    description: 'Diesel fuel'
+  },
+  'labor': {
+    name: 'Labor',
+    filename: 'water.png',  // Placeholder - you may want a different icon
+    path: `${ICON_BASE_PATH}/inputs/water.png`,
+    category: 'input',
+    description: 'Labor input'
+  },
+  'co2': {
+    name: 'CO2 Gas',
+    filename: 'co2-gas.svg',
+    path: `${ICON_BASE_PATH}/inputs/co2-gas.svg`,
+    category: 'input',
+    description: 'CO2 gas'
   },
 
   // Intermediate Outputs
   'live-chickens': {
     name: 'Live Chickens',
-    filename: 'live-chickens.png',
-    path: `${ICON_BASE_PATH}/intermediate/live-chickens.png`,
+    filename: 'live-chickens.svg',
+    path: `${ICON_BASE_PATH}/intermediate/live-chickens.svg`,
     category: 'intermediate',
     description: 'Live chickens ready for processing'
   },
   'dead-chickens': {
     name: 'Dead Chickens',
-    filename: 'dead-chickens.png',
-    path: `${ICON_BASE_PATH}/intermediate/dead-chickens.png`,
+    filename: 'dead-chickens.svg',
+    path: `${ICON_BASE_PATH}/intermediate/dead-chickens.svg`,
     category: 'intermediate',
     description: 'Mortality representation'
   },
   'used-poultry-litter': {
     name: 'Used Poultry Litter',
-    filename: 'used-poultry-litter.png',
-    path: `${ICON_BASE_PATH}/intermediate/used-poultry-litter.png`,
+    filename: 'used-poultry-litter.svg',
+    path: `${ICON_BASE_PATH}/intermediate/used-poultry-litter.svg`,
     category: 'intermediate',
     description: 'Used litter from chicken house'
   },
   'litter-char': {
     name: 'Litter & Char',
-    filename: 'litter-char-from-chicken-house.png',
-    path: `${ICON_BASE_PATH}/intermediate/litter-char-from-chicken-house.png`,
+    filename: 'litter-char-from-chicken-house.svg',
+    path: `${ICON_BASE_PATH}/intermediate/litter-char-from-chicken-house.svg`,
     category: 'intermediate',
     description: 'Litter and biochar mixture'
   },
@@ -128,6 +142,20 @@ export const iconMapping: IconMapping = {
     path: `${ICON_BASE_PATH}/intermediate/fog-fats-oils-greases.png`,
     category: 'intermediate',
     description: 'Fats, oils, and greases from processing'
+  },
+  'offal': {
+    name: 'Offal',
+    filename: 'fog-fats-oils-greases.png',
+    path: `${ICON_BASE_PATH}/intermediate/fog-fats-oils-greases.png`,
+    category: 'intermediate',
+    description: 'Offal from processing'
+  },
+  'offal-fog': {
+    name: 'Offal / DAF FOG',
+    filename: 'fog-fats-oils-greases.png',
+    path: `${ICON_BASE_PATH}/intermediate/fog-fats-oils-greases.png`,
+    category: 'intermediate',
+    description: 'Offal and fats, oils, greases from processing'
   },
 
   // Final Outputs
@@ -140,22 +168,29 @@ export const iconMapping: IconMapping = {
   },
   'biochar': {
     name: 'Biochar',
-    filename: 'biochar.png',
-    path: `${ICON_BASE_PATH}/outputs/biochar.png`,
+    filename: 'biochar.svg',
+    path: `${ICON_BASE_PATH}/outputs/biochar.svg`,
     category: 'output',
     description: 'Black biochar carbon sink material'
   },
   'digestate-liquids': {
     name: 'Digestate Liquids',
-    filename: 'digestate-liquids.png',
-    path: `${ICON_BASE_PATH}/outputs/digestate-liquids.png`,
+    filename: 'digestate-liquids.svg',
+    path: `${ICON_BASE_PATH}/outputs/digestate-liquids.svg`,
     category: 'output',
     description: 'Liquid digestate fertilizer'
   },
   'digestate-solids': {
     name: 'Digestate Solids',
-    filename: 'digestate-solids-reduced-volume.png',
-    path: `${ICON_BASE_PATH}/outputs/digestate-solids-reduced-volume.png`,
+    filename: 'digestate-solids-reduced-volume.svg',
+    path: `${ICON_BASE_PATH}/outputs/digestate-solids-reduced-volume.svg`,
+    category: 'output',
+    description: 'Reduced volume digestate solids'
+  },
+  'digestate-solids-reduced-volume': {
+    name: 'Digestate Solids (Reduced Volume)',
+    filename: 'digestate-solids-reduced-volume.svg',
+    path: `${ICON_BASE_PATH}/outputs/digestate-solids-reduced-volume.svg`,
     category: 'output',
     description: 'Reduced volume digestate solids'
   },
@@ -175,15 +210,15 @@ export const iconMapping: IconMapping = {
   },
   'water-output': {
     name: 'Water',
-    filename: 'water.png',
-    path: `${ICON_BASE_PATH}/outputs/water.png`,
+    filename: 'water.svg',
+    path: `${ICON_BASE_PATH}/outputs/water.svg`,
     category: 'output',
     description: 'Water output'
   },
   'wood-vinegars': {
     name: 'Wood Vinegars',
-    filename: 'wood-vinegars.png',
-    path: `${ICON_BASE_PATH}/outputs/wood-vinegars.png`,
+    filename: 'wood-vinegars.svg',
+    path: `${ICON_BASE_PATH}/outputs/wood-vinegars.svg`,
     category: 'output',
     description: 'Wood vinegar byproduct'
   },
@@ -191,22 +226,29 @@ export const iconMapping: IconMapping = {
   // Energy
   'bio-methane': {
     name: 'Renewable Bio Methane',
-    filename: 'bio-methane.png',
-    path: `${ICON_BASE_PATH}/energy/bio-methane.png`,
+    filename: 'bio-methane.svg',
+    path: `${ICON_BASE_PATH}/energy/bio-methane.svg`,
     category: 'energy',
     description: 'Renewable bio-methane'
   },
+  'syngas': {
+    name: 'Syngas',
+    filename: 'syngas-energy.svg',
+    path: `${ICON_BASE_PATH}/energy/syngas-energy.svg`,
+    category: 'energy',
+    description: 'Syngas renewable energy'
+  },
   'syngas-energy': {
     name: 'Syngas Energy',
-    filename: 'syngas-energy.png',
-    path: `${ICON_BASE_PATH}/energy/syngas-energy.png`,
+    filename: 'syngas-energy.svg',
+    path: `${ICON_BASE_PATH}/energy/syngas-energy.svg`,
     category: 'energy',
     description: 'Syngas renewable energy'
   },
   'renewable-energy': {
     name: 'Renewable Energy',
-    filename: 'renewable-biofuels.png',
-    path: `${ICON_BASE_PATH}/energy/renewable-biofuels.png`,
+    filename: 'renewable-biofuels.svg',
+    path: `${ICON_BASE_PATH}/energy/renewable-biofuels.svg`,
     category: 'energy',
     description: 'Renewable energy sources'
   },

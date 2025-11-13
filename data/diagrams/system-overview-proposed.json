@@ -1,0 +1,177 @@
+{
+  "metadata": {
+    "title": "Proposed System Overview",
+    "description": "High-level view of proposed circular biochar system showing major material flows only",
+    "type": "overview",
+    "system": "proposed",
+    "components": 6
+  },
+  "nodes": [
+    {
+      "id": "chicken-house",
+      "name": "Chicken<br/>House",
+      "x": 150,
+      "y": 200,
+      "width": 180,
+      "height": 150,
+      "color": "#059669",
+      "icon": "/images/iconslibrary/chicken-house-01.svg",
+      "iconOnly": true,
+      "showLabel": true
+    },
+    {
+      "id": "processing-plant",
+      "name": "Processing<br/>Plant",
+      "x": 450,
+      "y": 200,
+      "width": 180,
+      "height": 150,
+      "color": "#3B82F6",
+      "icon": "/images/iconslibrary/processing-plant-01.svg",
+      "iconOnly": true,
+      "showLabel": true
+    },
+    {
+      "id": "anaerobic-digester",
+      "name": "Anaerobic<br/>Digester",
+      "x": 150,
+      "y": 400,
+      "width": 180,
+      "height": 150,
+      "color": "#8B5CF6",
+      "icon": "/images/iconslibrary/anaerobic-digester-01.svg",
+      "iconOnly": true,
+      "showLabel": true
+    },
+    {
+      "id": "pyrolysis-unit",
+      "name": "Pyrolysis<br/>Unit",
+      "x": 450,
+      "y": 400,
+      "width": 180,
+      "height": 150,
+      "color": "#F59E0B",
+      "icon": "/images/iconslibrary/pyrolysis-unit-01.svg",
+      "iconOnly": true,
+      "showLabel": true
+    },
+    {
+      "id": "farms",
+      "name": "Farms",
+      "x": 150,
+      "y": 600,
+      "width": 180,
+      "height": 150,
+      "color": "#10B981",
+      "icon": "/images/iconslibrary/farm-01.svg",
+      "iconOnly": true,
+      "showLabel": true
+    },
+    {
+      "id": "waterways",
+      "name": "Waterways",
+      "x": 450,
+      "y": 600,
+      "width": 180,
+      "height": 150,
+      "color": "#06B6D4",
+      "icon": "/images/iconslibrary/waterways-01.svg",
+      "iconOnly": true,
+      "showLabel": true
+    }
+  ],
+  "links": [
+    {
+      "id": "link-1",
+      "source": "chicken-house",
+      "target": "processing-plant",
+      "value": 25,
+      "color": "#059669",
+      "label": "Live Birds",
+      "animationFrequency": 3,
+      "animationRate": 5,
+      "animationSize": 4,
+      "particleIconSource": "dot"
+    },
+    {
+      "id": "link-2",
+      "source": "chicken-house",
+      "target": "pyrolysis-unit",
+      "value": 12,
+      "color": "#92400E",
+      "label": "Litter",
+      "animationFrequency": 2,
+      "animationRate": 4,
+      "animationSize": 4,
+      "particleIconSource": "dot"
+    },
+    {
+      "id": "link-3",
+      "source": "processing-plant",
+      "target": "anaerobic-digester",
+      "value": 10,
+      "color": "#F59E0B",
+      "label": "FOG",
+      "animationFrequency": 2,
+      "animationRate": 4,
+      "animationSize": 4,
+      "particleIconSource": "dot"
+    },
+    {
+      "id": "link-4",
+      "source": "anaerobic-digester",
+      "target": "farms",
+      "value": 8,
+      "color": "#10B981",
+      "label": "Digestate",
+      "animationFrequency": 2,
+      "animationRate": 3,
+      "animationSize": 4,
+      "particleIconSource": "dot"
+    },
+    {
+      "id": "link-5",
+      "source": "pyrolysis-unit",
+      "target": "farms",
+      "value": 8,
+      "color": "#065F46",
+      "label": "Biochar",
+      "animationFrequency": 2,
+      "animationRate": 3,
+      "animationSize": 4,
+      "particleIconSource": "dot"
+    },
+    {
+      "id": "link-6",
+      "source": "pyrolysis-unit",
+      "target": "chicken-house",
+      "value": 6,
+      "color": "#065F46",
+      "label": "Biochar Bedding",
+      "animationFrequency": 2,
+      "animationRate": 3,
+      "animationSize": 4,
+      "particleIconSource": "dot",
+      "returnY": 850
+    },
+    {
+      "id": "link-7",
+      "source": "farms",
+      "target": "waterways",
+      "value": 3,
+      "color": "#14B8A6",
+      "label": "Clean Water",
+      "animationFrequency": 1,
+      "animationRate": 3,
+      "animationSize": 4,
+      "particleIconSource": "dot"
+    }
+  ],
+  "config": {
+    "width": 750,
+    "height": 900,
+    "nodePadding": 20,
+    "nodeWidth": 180,
+    "circularLinkGap": 20
+  }
+}

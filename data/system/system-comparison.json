@@ -77,7 +77,7 @@
           "Live Chickens",
           "Fossil Fuels",
           "Electricity",
-          "CO2 (dry ice)"
+          "CO2 Gas"
         ],
         "outputs": [
           "Meat",
@@ -102,7 +102,7 @@
         "inputs": [
           "Live Chickens",
           "Renewable Energy",
-          "CO2 (dry ice)"
+          "CO2 Gas"
         ],
         "outputs": [
           "Meat",

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ArrowLeft, ChevronDown } from 'lucide-react';
 import { SubsystemFlowView } from '@/components/system/SubsystemFlowView';
+import { ComponentSankeyDiagramV2 } from '@/components/d3/ComponentSankeyDiagramV2';
 import { Icon } from '@/components/ui/Icon';
 import { ComponentName } from '@/types';
 import { useSystemData } from '@/hooks/useSystemData';
@@ -117,6 +118,20 @@ export default function ComponentDetailPage() {
         {/* Current/Proposed Comparison - Now using visual SubsystemFlowView */}
         <section className="mb-8">
           <SubsystemFlowView componentId={componentId} />
+        </section>
+
+        {/* Component Flow Diagram with icon-based particles, hovers, and toggle */}
+        <section className="mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <h3 className="text-2xl font-bold mb-6 text-gray-900">
+              Material Flow Analysis
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Compare current vs proposed systems. Toggle between views, hover over materials for detailed information,
+              and watch material icons flow in real-time.
+            </p>
+            <ComponentSankeyDiagramV2 componentId={componentId} />
+          </div>
         </section>
 
         {/* Benefits Tabs */}

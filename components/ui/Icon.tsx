@@ -11,7 +11,7 @@ import { getIconPath } from '@/lib/iconMapping';
 
 export interface IconProps {
   name: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   className?: string;
 }
 
@@ -20,6 +20,8 @@ const sizeMap = {
   md: 32,
   lg: 48,
   xl: 64,
+  '2xl': 96,
+  '3xl': 128,
 };
 
 export function Icon({ name, size = 'md', className = '' }: IconProps) {

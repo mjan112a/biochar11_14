@@ -58,10 +58,10 @@
         "newName": "dry-ice.png",
         "description": "Dry ice for processing plant"
       },
-      "co2-dry-ice": {
-        "filename": "Generated Image October 29, 2025 - 7_26PM (3).png",
-        "newName": "co2-dry-ice.png",
-        "description": "CO2 representation for dry ice"
+      "co2-gas": {
+        "filename": "co2gas.svg",
+        "newName": "co2-gas.svg",
+        "description": "CO2 gas representation"
       }
     },
     "intermediateOutputs": {

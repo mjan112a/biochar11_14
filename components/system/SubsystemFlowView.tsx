@@ -44,20 +44,32 @@ function prepareFlowItems(items: string[]): FlowItem[] {
  * FlowNode: Renders a single flow item (input or output) with icon
  */
 function FlowNode({ item, type }: { item: FlowItem; type: 'input' | 'output' }) {
+  // CO2 icons have built-in labels, so they need special handling
+  const isCO2 = item.name.toLowerCase().includes('co2') || item.name.toLowerCase().includes('gas');
+  const iconSize = isCO2 ? 'w-32 h-32' : 'w-12 h-12';
+  const showLabel = !isCO2;
+  
+  // CO2 icons don't need the box styling since they have built-in labels
+  const containerClasses = isCO2
+    ? 'flex flex-col items-center gap-2 p-2'
+    : 'flex flex-col items-center gap-2 p-3 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200';
+  
   return (
-    <div className="flex flex-col items-center gap-2 p-3 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200">
-      <div className="w-12 h-12 relative flex-shrink-0">
+    <div className={containerClasses}>
+      <div className={`${iconSize} relative flex-shrink-0`}>
         <Image
           src={item.iconPath}
           alt={item.name}
           fill
           className="object-contain"
-          sizes="48px"
+          sizes={isCO2 ? "128px" : "48px"}
         />
       </div>
-      <span className="text-xs text-center text-gray-700 font-medium leading-tight max-w-[100px]">
-        {item.name}
-      </span>
+      {showLabel && (
+        <span className="text-xs text-center text-gray-700 font-medium leading-tight max-w-[100px]">
+          {item.name}
+        </span>
+      )}
     </div>
   );
 }

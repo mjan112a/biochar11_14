@@ -29,6 +29,11 @@ export function ComponentIcon({ id, name, description, keyMetric, isActive = fal
     router.push(`/${id}`);
   };
 
+  // CO2 icon has built-in label, so it needs special handling
+  const isCO2 = id === 'co2-input' || id === 'co2';
+  const iconSize = isCO2 ? '2xl' : 'xl';
+  const showLabel = !isCO2;
+
   return (
     <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root>
@@ -49,11 +54,13 @@ export function ComponentIcon({ id, name, description, keyMetric, isActive = fal
           >
             <div className="flex flex-col items-center gap-2">
               <div className="transition-all duration-200 group-hover:text-amber-600">
-                <Icon name={id} size="xl" />
+                <Icon name={id} size={iconSize} />
               </div>
-              <span className="text-sm font-semibold text-gray-700 text-center">
-                {name}
-              </span>
+              {showLabel && (
+                <span className="text-sm font-semibold text-gray-700 text-center">
+                  {name}
+                </span>
+              )}
             </div>
           </button>
         </Tooltip.Trigger>
