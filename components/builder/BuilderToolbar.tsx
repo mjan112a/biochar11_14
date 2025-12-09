@@ -11,9 +11,11 @@ interface BuilderToolbarProps {
   onThemeChange: (theme: DiagramTheme) => void;
   onEditTheme: () => void;
   onSave: () => void;
+  onSaveAs?: () => void;
   onLoad: () => void;
   onImportFromImage: () => void;
   onClear: () => void;
+  loadedFileName?: string | null;
 }
 
 export default function BuilderToolbar({
@@ -23,49 +25,51 @@ export default function BuilderToolbar({
   onThemeChange,
   onEditTheme,
   onSave,
+  onSaveAs,
   onLoad,
   onImportFromImage,
   onClear,
+  loadedFileName,
 }: BuilderToolbarProps) {
   return (
-    <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 shadow-lg">
+    <div className="bg-card border-b border-border px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center space-x-6">
-          <h1 className="text-xl font-bold flex items-center">
-            <span className="mr-2">🧪</span>
-            Sankey Flow Builder
+          <h1 className="text-lg font-bold flex items-center text-foreground uppercase tracking-wide">
+            <span className="mr-2 text-primary">⚡</span>
+            Sankey.OS Builder
           </h1>
           
           {/* Mode Toggle */}
-          <div className="flex bg-white/20 rounded-lg p-1">
+          <div className="flex bg-secondary border border-border p-1">
             <button
               onClick={() => onModeChange('edit')}
-              className={`px-4 py-2 rounded transition-all ${
+              className={`px-4 py-1.5 text-sm font-mono transition-all ${
                 mode === 'edit'
-                  ? 'bg-white text-purple-600 font-semibold'
-                  : 'text-white/80 hover:text-white'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              🏗️ Edit
+              EDIT
             </button>
             <button
               onClick={() => onModeChange('preview')}
-              className={`px-4 py-2 rounded transition-all ${
+              className={`px-4 py-1.5 text-sm font-mono transition-all ${
                 mode === 'preview'
-                  ? 'bg-white text-purple-600 font-semibold'
-                  : 'text-white/80 hover:text-white'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              👁️ Preview
+              PREVIEW
             </button>
           </div>
 
           {/* Theme Selector */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 border-l border-border pl-4">
             <ThemeSelector currentTheme={currentTheme} onThemeChange={onThemeChange} />
             <button
               onClick={onEditTheme}
-              className="bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-all"
+              className="bg-secondary hover:bg-secondary/80 border border-border px-3 py-2 text-foreground transition-all"
               title="Edit theme"
             >
               🎨
@@ -75,40 +79,61 @@ export default function BuilderToolbar({
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-3">
+          {/* Show loaded filename if available */}
+          {loadedFileName && (
+            <div className="flex items-center px-3 py-1.5 bg-secondary/50 border border-border text-muted-foreground text-xs font-mono">
+              <span className="mr-1">📄</span>
+              <span className="truncate max-w-[150px]" title={loadedFileName}>
+                {loadedFileName}
+              </span>
+            </div>
+          )}
+          
           <button
             onClick={onSave}
-            className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all flex items-center space-x-2"
-            title="Save diagram (Ctrl+S)"
+            className="bg-secondary hover:bg-secondary/80 border border-border px-4 py-2 text-foreground text-sm font-medium transition-all flex items-center space-x-2"
+            title={loadedFileName ? `Save to ${loadedFileName} (Ctrl+S)` : "Save diagram (Ctrl+S)"}
           >
             <span>💾</span>
-            <span>Save</span>
+            <span className="font-mono uppercase">Save</span>
           </button>
+          
+          {onSaveAs && (
+            <button
+              onClick={onSaveAs}
+              className="bg-secondary hover:bg-secondary/80 border border-border px-4 py-2 text-foreground text-sm font-medium transition-all flex items-center space-x-2"
+              title="Save As... (Ctrl+Shift+S)"
+            >
+              <span>📄</span>
+              <span className="font-mono uppercase">Save As</span>
+            </button>
+          )}
           
           <button
             onClick={onLoad}
-            className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all flex items-center space-x-2"
+            className="bg-secondary hover:bg-secondary/80 border border-border px-4 py-2 text-foreground text-sm font-medium transition-all flex items-center space-x-2"
             title="Load diagram (Ctrl+O)"
           >
             <span>📁</span>
-            <span>Load</span>
+            <span className="font-mono uppercase">Load</span>
           </button>
           
           <button
             onClick={onImportFromImage}
-            className="bg-green-500/80 hover:bg-green-500 px-4 py-2 rounded-lg transition-all flex items-center space-x-2"
+            className="bg-primary/10 hover:bg-primary/20 border border-primary/30 text-primary px-4 py-2 text-sm font-medium transition-all flex items-center space-x-2"
             title="Import from image using AI"
           >
             <span>📷</span>
-            <span>AI Import</span>
+            <span className="font-mono uppercase">AI Import</span>
           </button>
           
           <button
             onClick={onClear}
-            className="bg-red-500/80 hover:bg-red-500 px-4 py-2 rounded-lg transition-all flex items-center space-x-2"
+            className="bg-destructive/10 hover:bg-destructive/20 border border-destructive/30 text-destructive px-4 py-2 text-sm font-medium transition-all flex items-center space-x-2"
             title="Clear all"
           >
             <span>🗑️</span>
-            <span>Clear</span>
+            <span className="font-mono uppercase">Clear</span>
           </button>
         </div>
       </div>

@@ -1,8 +1,64 @@
 @import "tailwindcss";
 
 :root {
+  /* Modern Agritech Theme - Light Mode (Default) */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a; /* Slate 900 */
+  
+  /* Primary Accent - Tech Green */
+  --primary: #059669; /* Emerald 600 */
+  --primary-foreground: #ffffff;
+  
+  /* Secondary Accent - Tech Blue/Grey */
+  --secondary: #f1f5f9; /* Slate 100 */
+  --secondary-foreground: #0f172a; /* Slate 900 */
+  
+  /* Muted - For secondary text */
+  --muted: #f1f5f9; /* Slate 100 */
+  --muted-foreground: #64748b; /* Slate 500 */
+  
+  /* Technical Surfaces */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  
+  /* Borders and Lines */
+  --border: #cbd5e1; /* Slate 300 - darker for visibility on white */
+  --input: #e2e8f0;
+  --ring: #059669;
+  
+  /* Status */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  
+  /* Radii - Sharp/Tech */
+  --radius: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Force Light Mode based on user preference for this task, 
+     but keeping the block structure in case we want to enable it later.
+     Currently mapping dark system pref to light theme values. */
+  :root {
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --primary: #059669;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --border: #cbd5e1;
+    --input: #e2e8f0;
+    --ring: #059669;
+  }
 }
 
 @theme inline {
@@ -10,19 +66,39 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Technical Grid Background Utility - Light Mode (Softer) */
+.bg-tech-grid {
+  background-image: linear-gradient(to right, #f1f5f9 1px, transparent 1px),
+    linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
 }
 
 @keyframes fade-in {
@@ -42,15 +118,17 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 10px rgba(5, 150, 105, 0.2);
+    border-color: rgba(5, 150, 105, 0.4);
   }
   50% {
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.4);
+    border-color: rgba(5, 150, 105, 0.8);
   }
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 @keyframes slide-fade-in {

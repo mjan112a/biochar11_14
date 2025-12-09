@@ -12,83 +12,83 @@ export default function NodePalette({
   disabled = false,
 }: NodePaletteProps) {
   return (
-    <div className="w-64 bg-white border-r border-gray-200 p-4 space-y-4">
+    <div className="w-64 bg-card border-r border-border p-4 space-y-6">
       <div>
-        <h2 className="text-lg font-bold text-gray-800 mb-4">Tools</h2>
+        <h2 className="text-sm font-bold text-muted-foreground mb-4 uppercase tracking-wider">Palette</h2>
         
         <div className="space-y-2">
           {/* Add Node Button */}
           <button
             onClick={onAddNode}
             disabled={disabled}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-4 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-md"
+            className="w-full bg-primary text-primary-foreground py-3 px-4 hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-sm border border-primary/20 group"
             title="Add new node (N)"
           >
-            <span className="text-xl">➕</span>
-            <span className="font-semibold">Add Node</span>
+            <span className="text-lg group-hover:scale-110 transition-transform">➕</span>
+            <span className="font-mono font-semibold uppercase text-sm">Add Node</span>
           </button>
 
           {/* Start Connection Button */}
           <button
             onClick={onStartConnection}
             disabled={disabled}
-            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 px-4 rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-md"
+            className="w-full bg-secondary text-secondary-foreground py-3 px-4 border border-border hover:bg-secondary/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-sm group"
             title="Draw connection (C)"
           >
-            <span className="text-xl">🔗</span>
-            <span className="font-semibold">Connect</span>
+            <span className="text-lg group-hover:scale-110 transition-transform">🔗</span>
+            <span className="font-mono font-semibold uppercase text-sm">Connect</span>
           </button>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-4">
-        <h3 className="text-sm font-semibold text-gray-600 mb-2">Keyboard Shortcuts</h3>
-        <div className="space-y-1 text-xs text-gray-500">
-          <div className="flex justify-between">
+      <div className="border-t border-border pt-4">
+        <h3 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider">Shortcuts</h3>
+        <div className="space-y-2 text-xs text-muted-foreground font-mono">
+          <div className="flex justify-between items-center">
             <span>Add Node</span>
-            <kbd className="bg-gray-100 px-2 py-0.5 rounded">N</kbd>
+            <kbd className="bg-secondary px-2 py-1 border border-border text-foreground">N</kbd>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span>Connect</span>
-            <kbd className="bg-gray-100 px-2 py-0.5 rounded">C</kbd>
+            <kbd className="bg-secondary px-2 py-1 border border-border text-foreground">C</kbd>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span>Delete</span>
-            <kbd className="bg-gray-100 px-2 py-0.5 rounded">Del</kbd>
+            <kbd className="bg-secondary px-2 py-1 border border-border text-foreground">Del</kbd>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span>Cancel</span>
-            <kbd className="bg-gray-100 px-2 py-0.5 rounded">Esc</kbd>
+            <kbd className="bg-secondary px-2 py-1 border border-border text-foreground">Esc</kbd>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span>Save</span>
-            <kbd className="bg-gray-100 px-2 py-0.5 rounded">Ctrl+S</kbd>
+            <kbd className="bg-secondary px-2 py-1 border border-border text-foreground">Ctrl+S</kbd>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-4">
-        <h3 className="text-sm font-semibold text-gray-600 mb-2">How to Use</h3>
-        <ol className="space-y-2 text-xs text-gray-600">
-          <li className="flex">
-            <span className="mr-2">1.</span>
-            <span>Click "Add Node" to create a node on the canvas</span>
+      <div className="border-t border-border pt-4">
+        <h3 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider">Guide</h3>
+        <ol className="space-y-3 text-xs text-muted-foreground font-mono">
+          <li className="flex gap-2">
+            <span className="text-primary">01.</span>
+            <span>Click "Add Node" to spawn entity</span>
           </li>
-          <li className="flex">
-            <span className="mr-2">2.</span>
-            <span>Drag nodes to position them</span>
+          <li className="flex gap-2">
+            <span className="text-primary">02.</span>
+            <span>Drag to reposition</span>
           </li>
-          <li className="flex">
-            <span className="mr-2">3.</span>
-            <span>Click "Connect", then click source and target nodes</span>
+          <li className="flex gap-2">
+            <span className="text-primary">03.</span>
+            <span>"Connect" to link nodes</span>
           </li>
-          <li className="flex">
-            <span className="mr-2">4.</span>
-            <span>Click nodes or links to style them in the right panel</span>
+          <li className="flex gap-2">
+            <span className="text-primary">04.</span>
+            <span>Select to configure properties</span>
           </li>
-          <li className="flex">
-            <span className="mr-2">5.</span>
-            <span>Press Delete to remove selected items</span>
+          <li className="flex gap-2">
+            <span className="text-primary">05.</span>
+            <span>Delete to remove artifacts</span>
           </li>
         </ol>
       </div>

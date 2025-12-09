@@ -254,6 +254,30 @@ export default function StylePanel({
                   />
                 </div>
               )}
+
+              {/* Label Offset - vertical position adjustment */}
+              {(selectedNode.showLabel !== false) && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Label Offset: {selectedNode.labelOffset || 0}px
+                  </label>
+                  <input
+                    type="range"
+                    min="-50"
+                    max="50"
+                    value={selectedNode.labelOffset || 0}
+                    onChange={(e) => onUpdateNode({ labelOffset: parseInt(e.target.value) })}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>Higher</span>
+                    <span>Lower</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Adjust vertical position of label below icon
+                  </p>
+                </div>
+              )}
               </div>
 
             </>

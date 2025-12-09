@@ -2,339 +2,421 @@
   "nodes": [
     {
       "id": "chicken-house",
-      "name": "Chicken House",
-      "type": "component",
-      "position": "left"
+      "name": "Poultry<br/>Producer",
+      "x": 200,
+      "y": 350,
+      "width": 150,
+      "height": 150,
+      "color": "#059669",
+      "icon": "/images/iconslibrary/chicken-house-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": -17,
+      "tooltip": "PROBLEM: High operational costs, labor-intensive litter management, disease risk from accumulated waste, and ammonia buildup affecting bird health and worker safety."
     },
     {
       "id": "processing-plant",
-      "name": "Processing Plant",
-      "type": "component",
-      "position": "top"
+      "name": "Processing<br/>Plant",
+      "x": 502.25733634311507,
+      "y": 324.3406842573776,
+      "width": 150,
+      "height": 150,
+      "color": "#3B82F6",
+      "icon": "/images/iconslibrary/processing-plant-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "tooltip": "PROBLEM: High energy consumption, significant GHG emissions, costly waste disposal for fats/oils/greases, and limited waste-to-value conversion."
     },
     {
-      "id": "farm",
-      "name": "Farm / Crops",
-      "type": "component",
-      "position": "bottom"
+      "id": "farms",
+      "name": "Farms",
+      "x": 482.3551542513168,
+      "y": 524.1384638640219,
+      "width": 150,
+      "height": 150,
+      "color": "#10B981",
+      "icon": "/images/iconslibrary/farm-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "tooltip": "PROBLEM: Over-reliance on chemical fertilizers, nutrient runoff causing water pollution, soil degradation, high diesel consumption, and GHG emissions from synthetic inputs."
     },
     {
-      "id": "landfill",
-      "name": "Landfill",
-      "type": "waste",
-      "position": "right"
+      "id": "waterways",
+      "name": "Waterways",
+      "x": 800,
+      "y": 460,
+      "width": 145,
+      "height": 150,
+      "color": "#06B6D4",
+      "icon": "/images/iconslibrary/waterways-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "tooltip": "PROBLEM: Receiving excess nutrients from farm runoff causing algal blooms, fish kills, dead zones, and ecosystem damage. Phosphorus and nitrogen pollution threatens drinking water quality."
     },
     {
-      "id": "fresh-pine-shavings",
-      "name": "Fresh Pine Shavings",
-      "type": "input",
-      "icon": "fresh-pine-shavings"
+      "id": "fresh-bedding",
+      "name": "Fresh Poultry<br/>Bedding",
+      "x": 50,
+      "y": 280,
+      "color": "#EAB308",
+      "width": 60,
+      "height": 60,
+      "icon": "/images/iconslibrary/fresh-pine-shavings-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": 12,
+      "tooltip": "PROBLEM: Continuous expense for new pine shavings, supply chain dependency, transportation costs, and no value recovery from used bedding."
     },
     {
-      "id": "chicken-feed-input",
-      "name": "Chicken Feed",
-      "type": "input",
-      "icon": "chicken-feed"
-    },
-    {
-      "id": "fossil-fuels",
-      "name": "Fossil Fuels",
-      "type": "input",
-      "icon": "fossil-fuel"
-    },
-    {
-      "id": "electricity-input",
-      "name": "Electricity",
-      "type": "input",
-      "icon": "fossil-fuel"
-    },
-    {
-      "id": "chemical-fertilizers",
-      "name": "Chemical Fertilizers",
-      "type": "input",
-      "icon": "fertilizer"
-    },
-    {
-      "id": "diesel",
-      "name": "Diesel",
-      "type": "input",
-      "icon": "diesel"
-    },
-    {
-      "id": "labor-farm",
+      "id": "labor",
       "name": "Labor",
-      "type": "input",
-      "icon": "labor"
+      "x": 50,
+      "y": 380,
+      "color": "#6B7280",
+      "width": 55,
+      "height": 49,
+      "icon": "/images/iconslibrary/labor-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": 9,
+      "tooltip": "PROBLEM: High labor costs for manual litter removal (every 6-8 weeks), worker exposure to ammonia and dust, labor shortages in agricultural sector."
     },
     {
-      "id": "live-chickens",
-      "name": "Live Chickens",
-      "type": "intermediate",
-      "icon": "live-chickens"
+      "id": "chicken-feed-water",
+      "name": "Chicken Feed<br/>and Water",
+      "x": 50,
+      "y": 480,
+      "color": "#EAB308",
+      "width": 55,
+      "height": 55,
+      "icon": "/images/iconslibrary/chicken-feed-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": 22,
+      "tooltip": "PROBLEM: Feed represents 60-70% of production costs, volatile grain prices, water scarcity concerns, and limited circular economy integration."
     },
     {
-      "id": "dead-chickens",
-      "name": "Dead Chickens",
-      "type": "intermediate",
-      "icon": "dead-chickens"
+      "id": "energy-input",
+      "name": "Energy",
+      "x": 340.97065462753955,
+      "y": 266.2154218243504,
+      "color": "#F59E0B",
+      "width": 55,
+      "height": 55,
+      "icon": "/images/iconslibrary/energy-02.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": 9,
+      "tooltip": "PROBLEM: Heavy reliance on grid electricity and fossil fuels, high energy costs, vulnerability to price fluctuations, and carbon footprint from non-renewable sources."
     },
     {
-      "id": "used-litter",
-      "name": "Used Poultry Litter",
-      "type": "intermediate",
-      "icon": "used-poultry-litter"
+      "id": "diesel-input",
+      "name": "Diesel",
+      "x": 280,
+      "y": 550,
+      "color": "#6B7280",
+      "width": 63,
+      "height": 65,
+      "icon": "/images/iconslibrary/diesel-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": -1,
+      "tooltip": "PROBLEM: Fossil fuel dependency for farm equipment, volatile fuel prices, direct GHG emissions, and no pathway to renewable alternatives in current system."
     },
     {
-      "id": "fog-waste",
-      "name": "FOG Waste",
-      "type": "intermediate",
-      "icon": "offal-fog"
-    },
-    {
-      "id": "meat",
-      "name": "Meat",
-      "type": "output",
-      "icon": "meat"
-    },
-    {
-      "id": "crops",
-      "name": "Crops",
-      "type": "output",
-      "icon": "crops"
+      "id": "fertilizer-input",
+      "name": "Chemical<br/>Fertilizer",
+      "x": 234.10082768999246,
+      "y": 640,
+      "color": "#84CC16",
+      "width": 50,
+      "height": 50,
+      "icon": "/images/iconslibrary/fertilizer-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": 18,
+      "tooltip": "PROBLEM: Expensive synthetic fertilizers, energy-intensive production (natural gas), soil microbiome damage, groundwater contamination, and nutrient runoff causing eutrophication."
     },
     {
       "id": "water-input",
       "name": "Water",
-      "type": "input",
-      "icon": "water"
+      "x": 367.3062452972159,
+      "y": 672.2131711987101,
+      "color": "#0EA5E9",
+      "width": 50,
+      "height": 50,
+      "icon": "/images/iconslibrary/water-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "tooltip": "PROBLEM: High irrigation demands, aquifer depletion, water scarcity in drought-prone regions, and competition with municipal/industrial water needs."
     },
     {
-      "id": "liquid-co2",
-      "name": "Liquefied CO₂",
-      "type": "input",
-      "icon": "co2"
+      "id": "meat-output",
+      "name": "Meat",
+      "x": 834.2964635063958,
+      "y": 289.76267656494065,
+      "color": "#DC2626",
+      "width": 60,
+      "height": 60,
+      "iconOnly": true,
+      "showLabel": true,
+      "icon": "/images/iconslibrary/chicken-meat-01.svg",
+      "tooltip": "OUTPUT: Primary product - chicken meat for human consumption. Challenge is reducing environmental footprint while maintaining production efficiency."
     },
     {
-      "id": "ammonia-emissions",
-      "name": "Ammonia Emissions",
-      "type": "waste",
-      "icon": "waste"
+      "id": "fog-output",
+      "name": "Fats Oils<br/>Greases",
+      "x": 804.1008276899926,
+      "y": 364.3406842573775,
+      "color": "#92400E",
+      "width": 55,
+      "height": 55,
+      "icon": "/images/iconslibrary/fog-fats-oils-greases-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "labelOffset": 18,
+      "tooltip": "PROBLEM: Waste disposal costs, can clog municipal sewers, limited value recovery, and potential for conversion to biofuels not being utilized."
     },
     {
-      "id": "ghg-emissions-chicken",
-      "name": "GHG Emissions (Chicken House)",
-      "type": "waste",
-      "icon": "waste"
+      "id": "dead-birds",
+      "name": "Dead<br/>Birds",
+      "x": 494.469525959368,
+      "y": 489.18691949814405,
+      "color": "#DC2626",
+      "width": 55,
+      "height": 55,
+      "icon": "/images/iconslibrary/dead-chickens-01.svg",
+      "iconOnly": true,
+      "showLabel": true,
+      "tooltip": "PROBLEM: 3-5% mortality rate represents economic loss, biosecurity concerns, disposal costs and regulations, and missed opportunity for nutrient recovery."
     },
     {
-      "id": "ghg-emissions",
-      "name": "GHG Emissions",
-      "type": "waste",
-      "icon": "waste"
+      "id": "ghg-processing",
+      "name": "GHG",
+      "x": 800.8276899924756,
+      "y": 224.2395740606997,
+      "color": "#6B7280",
+      "width": 50,
+      "height": 50,
+      "iconOnly": true,
+      "showLabel": true,
+      "icon": "/images/iconslibrary/GHG-01.svg",
+      "tooltip": "PROBLEM: Significant CO2 and methane emissions from processing operations contributing to climate change. No carbon capture or offset mechanisms in place."
     },
     {
-      "id": "water-pollution",
-      "name": "Water Pollution",
-      "type": "waste",
-      "icon": "waste"
+      "id": "ghg-farm",
+      "name": "GHG<br/>Emissions",
+      "x": 668.058690744921,
+      "y": 460.28787853339827,
+      "color": "#6B7280",
+      "width": 50,
+      "height": 50,
+      "iconOnly": true,
+      "showLabel": true,
+      "icon": "/images/iconslibrary/GHG-01.svg",
+      "labelOffset": 15,
+      "fontSize": 11,
+      "tooltip": "PROBLEM: N2O from fertilizer application (298x more potent than CO2), methane from decomposing litter, and CO2 from diesel equipment. Major contributor to agricultural emissions."
     },
     {
-      "id": "fertilizer-losses",
-      "name": "Fertilizer Winter Losses",
-      "type": "waste",
-      "icon": "waste"
+      "id": "crops-output",
+      "name": "Crops",
+      "x": 850,
+      "y": 650,
+      "color": "#10B981",
+      "width": 58,
+      "height": 62,
+      "iconOnly": true,
+      "showLabel": true,
+      "icon": "/images/iconslibrary/crops-corn-01.svg",
+      "tooltip": "OUTPUT: Crops grown using chemical fertilizers. Lower soil health over time, vulnerable to drought, and contributing to nutrient runoff issues."
     }
   ],
-  "flows": [
+  "links": [
     {
-      "source": "fresh-pine-shavings",
+      "id": "link-bedding-to-producer",
+      "source": "fresh-bedding",
       "target": "chicken-house",
-      "type": "material",
-      "label": "Fresh Pine Shavings",
-      "value": 100
+      "value": 10,
+      "color": "#EAB308",
+      "label": "Fresh Bedding",
+      "tooltip": "PROBLEM: Continuous cost burden - bedding must be replaced every 6-8 weeks with no value recovery from used material."
     },
     {
-      "source": "chicken-feed-input",
+      "id": "link-labor-to-producer",
+      "source": "labor",
       "target": "chicken-house",
-      "type": "material",
-      "label": "Chicken Feed",
-      "value": 150
-    },
-    {
-      "source": "fossil-fuels",
-      "target": "chicken-house",
-      "type": "energy",
-      "label": "Fossil Fuels (Heating)",
-      "value": 30
-    },
-    {
-      "source": "water-input",
-      "target": "chicken-house",
-      "type": "material",
-      "label": "Water",
-      "value": 20
-    },
-    {
-      "source": "chicken-house",
-      "target": "live-chickens",
-      "type": "material",
-      "label": "Live Chickens",
-      "value": 200
-    },
-    {
-      "source": "chicken-house",
-      "target": "dead-chickens",
-      "type": "material",
-      "label": "Dead Chickens",
-      "value": 10
-    },
-    {
-      "source": "chicken-house",
-      "target": "used-litter",
-      "type": "manure",
-      "label": "Used Poultry Litter",
-      "value": 80
-    },
-    {
-      "source": "chicken-house",
-      "target": "ammonia-emissions",
-      "type": "waste",
-      "label": "Ammonia Emissions",
-      "value": 15
-    },
-    {
-      "source": "chicken-house",
-      "target": "ghg-emissions-chicken",
-      "type": "waste",
-      "label": "GHG Emissions",
-      "value": 25
-    },
-    {
-      "source": "live-chickens",
-      "target": "processing-plant",
-      "type": "material",
-      "label": "Chickens to Processing",
-      "value": 200
-    },
-    {
-      "source": "fossil-fuels",
-      "target": "processing-plant",
-      "type": "energy",
-      "label": "Fossil Fuels",
-      "value": 100
-    },
-    {
-      "source": "electricity-input",
-      "target": "processing-plant",
-      "type": "energy",
-      "label": "Electricity",
-      "value": 50
-    },
-    {
-      "source": "liquid-co2",
-      "target": "processing-plant",
-      "type": "material",
-      "label": "Liquefied CO₂",
-      "value": 30
-    },
-    {
-      "source": "processing-plant",
-      "target": "meat",
-      "type": "material",
-      "label": "Meat Products",
-      "value": 150
-    },
-    {
-      "source": "processing-plant",
-      "target": "fog-waste",
-      "type": "material",
-      "label": "FOG Waste",
-      "value": 50
-    },
-    {
-      "source": "processing-plant",
-      "target": "ghg-emissions",
-      "type": "waste",
-      "label": "GHG Emissions",
-      "value": 80
-    },
-    {
-      "source": "fog-waste",
-      "target": "landfill",
-      "type": "waste",
-      "label": "FOG to Landfill",
-      "value": 50
-    },
-    {
-      "source": "dead-chickens",
-      "target": "landfill",
-      "type": "waste",
-      "label": "Dead Chickens to Landfill",
-      "value": 10
-    },
-    {
-      "source": "used-litter",
-      "target": "farm",
-      "type": "material",
-      "label": "Raw Litter to Farm",
-      "value": 40
-    },
-    {
-      "source": "used-litter",
-      "target": "landfill",
-      "type": "waste",
-      "label": "Excess Litter to Landfill",
-      "value": 40
-    },
-    {
-      "source": "chemical-fertilizers",
-      "target": "farm",
-      "type": "material",
-      "label": "Chemical Fertilizers",
-      "value": 60
-    },
-    {
-      "source": "diesel",
-      "target": "farm",
-      "type": "energy",
-      "label": "Diesel",
-      "value": 30
-    },
-    {
-      "source": "labor-farm",
-      "target": "farm",
-      "type": "input",
+      "value": 5,
+      "color": "#6B7280",
       "label": "Labor",
-      "value": 15
+      "arcRadius": 0.5,
+      "returnY": 660,
+      "tooltip": "PROBLEM: Labor-intensive litter management requires frequent cleanouts, exposing workers to ammonia and pathogens."
     },
     {
-      "source": "farm",
-      "target": "crops",
-      "type": "material",
-      "label": "Crop Production",
-      "value": 100
+      "id": "link-feed-to-producer",
+      "source": "chicken-feed-water",
+      "target": "chicken-house",
+      "value": 12,
+      "color": "#EAB308",
+      "label": "Feed & Water",
+      "tooltip": "PROBLEM: Feed costs represent 60-70% of production expenses with volatile commodity prices and limited local sourcing."
     },
     {
-      "source": "farm",
-      "target": "water-pollution",
-      "type": "waste",
-      "label": "Water/GHG/Nitrogen Losses",
-      "value": 60
+      "id": "link-live-birds",
+      "source": "chicken-house",
+      "target": "processing-plant",
+      "value": 20,
+      "color": "#059669",
+      "label": "Live Birds",
+      "animationFrequency": 2,
+      "animationRate": 4,
+      "animationSize": 8,
+      "particleIconSource": "custom",
+      "particleType": "icon",
+      "particleIcon": "/images/iconslibrary/live-chickens-01.svg",
+      "tooltip": "Live birds transported to processing plant. Transportation stress can affect meat quality and represents biosecurity risk."
     },
     {
-      "source": "farm",
-      "target": "fertilizer-losses",
-      "type": "waste",
-      "label": "Fertilizer Winter Losses",
-      "value": 30
+      "id": "link-dead-birds",
+      "source": "chicken-house",
+      "target": "dead-birds",
+      "value": 15,
+      "color": "#DC2626",
+      "label": "Dead Birds",
+      "tooltip": "PROBLEM: Mortality represents direct economic loss. Carcass disposal is costly and nutrients/energy are wasted instead of recovered."
     },
     {
-      "source": "crops",
-      "target": "chicken-feed-input",
-      "type": "material",
-      "label": "Crops to Feed (circular)",
-      "value": 50,
-      "circular": true
+      "id": "link-waste-litter",
+      "source": "chicken-house",
+      "target": "farms",
+      "value": 35,
+      "color": "#92400E",
+      "label": "Waste Litter",
+      "animationFrequency": 2,
+      "animationRate": 3,
+      "animationSize": 6,
+      "particleIconSource": "custom",
+      "particleType": "icon",
+      "particleIcon": "/images/iconslibrary/used-poultry-litter-01.svg",
+      "tooltip": "PROBLEM: Raw litter applied directly to fields causes nutrient overloading, pathogen spread, and excessive phosphorus accumulation in soil."
+    },
+    {
+      "id": "link-energy-to-plant",
+      "source": "energy-input",
+      "target": "processing-plant",
+      "value": 25,
+      "color": "#F59E0B",
+      "label": "Energy",
+      "tooltip": "PROBLEM: High electricity consumption from non-renewable sources, contributing to operational costs and carbon footprint."
+    },
+    {
+      "id": "link-plant-to-meat",
+      "source": "processing-plant",
+      "target": "meat-output",
+      "value": 15,
+      "color": "#DC2626",
+      "label": "Meat Products",
+      "animationFrequency": 2,
+      "animationRate": 4,
+      "animationSize": 6,
+      "particleIconSource": "custom",
+      "particleType": "icon",
+      "particleIcon": "/images/iconslibrary/chicken-meat-01.svg",
+      "tooltip": "Primary product output. Environmental footprint per kg of meat is higher than necessary due to inefficient waste management."
+    },
+    {
+      "id": "link-plant-to-fog",
+      "source": "processing-plant",
+      "target": "fog-output",
+      "value": 20,
+      "color": "#92400E",
+      "label": "FOG",
+      "tooltip": "PROBLEM: Fats, oils, and greases disposed as waste rather than converted to renewable biofuels. Disposal costs and environmental liability."
+    },
+    {
+      "id": "link-plant-to-ghg",
+      "source": "processing-plant",
+      "target": "ghg-processing",
+      "value": 30,
+      "color": "#6B7280",
+      "label": "GHG Emissions",
+      "tooltip": "PROBLEM: Unmitigated greenhouse gas emissions from energy use and processing operations. No carbon capture or offset strategy."
+    },
+    {
+      "id": "link-diesel-to-farm",
+      "source": "diesel-input",
+      "target": "farms",
+      "value": 22,
+      "color": "#6B7280",
+      "label": "Diesel",
+      "tooltip": "PROBLEM: Fossil fuel dependency for tractors and equipment. Direct GHG emissions and exposure to volatile fuel prices."
+    },
+    {
+      "id": "link-fertilizer-to-farm",
+      "source": "fertilizer-input",
+      "target": "farms",
+      "value": 25,
+      "color": "#84CC16",
+      "label": "Fertilizer",
+      "tooltip": "PROBLEM: Synthetic fertilizers are costly, energy-intensive to produce, damage soil health, and much of the nutrients run off into waterways."
+    },
+    {
+      "id": "link-water-to-farm",
+      "source": "water-input",
+      "target": "farms",
+      "value": 18,
+      "color": "#0EA5E9",
+      "label": "Water",
+      "tooltip": "PROBLEM: High irrigation demands deplete aquifers. Chemically-treated soil has poor water retention, requiring more irrigation."
+    },
+    {
+      "id": "link-farm-to-crops",
+      "source": "farms",
+      "target": "crops-output",
+      "value": 12,
+      "color": "#10B981",
+      "label": "Crops",
+      "tooltip": "Crop yields dependent on synthetic inputs. Soil degradation over time reduces productivity and increases input requirements."
+    },
+    {
+      "id": "link-farm-to-ghg",
+      "source": "farms",
+      "target": "ghg-farm",
+      "value": 35,
+      "color": "#6B7280",
+      "label": "GHG Emissions",
+      "tooltip": "PROBLEM: N2O emissions from synthetic fertilizers (298x warming potential vs CO2), plus methane from raw litter decomposition."
+    },
+    {
+      "id": "link-farm-to-waterways",
+      "source": "farms",
+      "target": "waterways",
+      "value": 35,
+      "color": "#F59E0B",
+      "label": "Nutrient Runoff",
+      "animationFrequency": 2,
+      "animationRate": 3,
+      "animationSize": 11,
+      "particleType": "dot",
+      "tooltip": "CRITICAL PROBLEM: Excess nitrogen and phosphorus runoff causes algal blooms, hypoxic dead zones, fish kills, and drinking water contamination."
+    },
+    {
+      "id": "link-farm-to-feed",
+      "source": "farms",
+      "target": "chicken-feed-water",
+      "value": 10,
+      "color": "#EAB308",
+      "returnY": 778.9692470481533,
+      "label": "Crops to Feed",
+      "tooltip": "Circular flow: crops become chicken feed. However, nutrient losses through runoff and GHG emissions make this cycle inefficient."
     }
-  ]
+  ],
+  "config": {
+    "width": 950,
+    "height": 850,
+    "nodePadding": 20,
+    "nodeWidth": 180,
+    "circularLinkGap": 20
+  }
 }

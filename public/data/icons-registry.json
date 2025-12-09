@@ -37,6 +37,17 @@
           "name": "Farm Waterways",
           "file": "farm-waterways-01.svg",
           "keywords": "farm, waterways, field, agriculture, land"
+        },
+        {
+          "name": "Chicken Processing Plant",
+          "file": "chicken-processing-plant-03.svg",
+          "keywords": "chicken, processing, plant, factory, slaughter, facility",
+          "tooltip": "chicken-processing-plant-03"
+        },
+        {
+          "name": "Chicken Processing Alt",
+          "file": "chickenprocessing02.svg",
+          "keywords": "chicken, processing, plant, factory, alternate"
         }
       ]
     },
@@ -59,6 +70,33 @@
           "name": "Renewable Biofuels",
           "file": "renewable-biofuels-01.svg",
           "keywords": "renewable, biofuels, fuel, oil, diesel"
+        },
+        {
+          "name": "Energy",
+          "file": "energy-02.svg",
+          "keywords": "energy, power, electricity, lightning, bolt",
+          "tooltip": "energy-02"
+        }
+      ]
+    },
+    {
+      "name": "Emissions",
+      "icon": "☁️",
+      "icons": [
+        {
+          "name": "GHG Emissions",
+          "file": "GHG-01.svg",
+          "keywords": "ghg, greenhouse, gas, emissions, carbon, co2"
+        },
+        {
+          "name": "GHG Icon",
+          "file": "GHG-icon-01.svg",
+          "keywords": "ghg, greenhouse, gas, emissions, carbon, co2, icon"
+        },
+        {
+          "name": "CO2",
+          "file": "C02-01.svg",
+          "keywords": "co2, carbon, dioxide, emissions"
         }
       ]
     },
@@ -131,6 +169,16 @@
           "name": "Water",
           "file": "water-01.svg",
           "keywords": "water, liquid, h2o"
+        },
+        {
+          "name": "Water Runoff",
+          "file": "water-runoff-02.svg",
+          "keywords": "water, runoff, drainage, stormwater, pollution, environmental"
+        },
+        {
+          "name": "Water Runoff Alt",
+          "file": "water-runoff-03.svg",
+          "keywords": "water, runoff, drainage, stormwater, pollution, environmental, alternate"
         }
       ]
     },

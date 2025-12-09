@@ -63,7 +63,7 @@
       "width": 80,
       "height": 80,
       "color": "#10B981",
-      "icon": "/images/iconslibrary/aquatic-ecosystem-01.svg",
+      "icon": "/images/iconslibrary/farm-waterways-01.svg",
       "iconOnly": true,
       "showLabel": true
     },
@@ -75,7 +75,7 @@
       "width": 80,
       "height": 80,
       "color": "#EF4444",
-      "icon": "/images/iconslibrary/pollution-reduction-01.svg",
+      "icon": "/images/iconslibrary/GHG-01.svg",
       "iconOnly": true,
       "showLabel": true
     }
@@ -99,8 +99,8 @@
       "value": 10,
       "color": "#1F2937",
       "label": "Filters pollutants",
-      "animationFrequency": 2,
-      "animationRate": 3,
+      "animationFrequency": 3,
+      "animationRate": 4,
       "animationSize": 4
     },
     {
@@ -110,8 +110,8 @@
       "value": 16,
       "color": "#0EA5E9",
       "label": "95% clean",
-      "animationFrequency": 2,
-      "animationRate": 5,
+      "animationFrequency": 3,
+      "animationRate": 6,
       "animationSize": 5
     },
     {
@@ -121,8 +121,8 @@
       "value": 12,
       "color": "#10B981",
       "label": "Thriving",
-      "animationFrequency": 2,
-      "animationRate": 4,
+      "animationFrequency": 3,
+      "animationRate": 5,
       "animationSize": 4
     },
     {
@@ -133,7 +133,7 @@
       "color": "#EF4444",
       "label": "5% only",
       "animationFrequency": 1,
-      "animationRate": 2,
+      "animationRate": 1,
       "animationSize": 2
     }
   ],

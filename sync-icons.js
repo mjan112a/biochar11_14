@@ -1,12 +1,14 @@
 /**
  * Icon Sync Script
- * 
- * This script copies icons from data/iconslibrary/ to public/images/iconslibrary/
- * and optionally registers them in public/data/icons-registry.json
- * 
+ *
+ * This script copies icons from the biochar-website-v5 iconslibrary to
+ * public/images/iconslibrary/ to maintain a single source of truth for all icons.
+ *
+ * Source: C:\Users\myers\githuprepo\Biochar2\biochar-website-v5\public\images\iconslibrary
+ *
  * Usage:
  *   node sync-icons.js [--register]
- * 
+ *
  * Options:
  *   --register: Also add new icons to the registry (requires manual category selection)
  */
@@ -14,8 +16,9 @@
 const fs = require('fs');
 const path = require('path');
 
-// Directories
-const SOURCE_DIR = path.join(__dirname, 'data', 'iconslibrary');
+// Directories - Use biochar-website-v5 as the single source of truth for icons
+const V5_PROJECT_ROOT = path.resolve(__dirname, '..', 'biochar-website-v5');
+const SOURCE_DIR = path.join(V5_PROJECT_ROOT, 'public', 'images', 'iconslibrary');
 const DEST_DIR = path.join(__dirname, 'public', 'images', 'iconslibrary');
 const REGISTRY_FILE = path.join(__dirname, 'public', 'data', 'icons-registry.json');
 
@@ -79,6 +82,15 @@ function getRegisteredIcons() {
 
 function main() {
   log('\n🎨 Icon Sync Tool\n', 'blue');
+  log('Single Source of Truth: biochar-website-v5 iconslibrary\n', 'blue');
+  
+  // Check if source directory exists
+  if (!fs.existsSync(SOURCE_DIR)) {
+    log(`✗ Source directory not found: ${SOURCE_DIR}`, 'red');
+    log(`\nMake sure the biochar-website-v5 project is located at:`, 'yellow');
+    log(`  ${V5_PROJECT_ROOT}`, 'yellow');
+    return;
+  }
   
   // Ensure destination directory exists
   ensureDirectoryExists(DEST_DIR);

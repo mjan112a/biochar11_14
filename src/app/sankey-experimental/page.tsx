@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DiagramTabs } from '@/components/ui/DiagramTabs';
@@ -13,6 +13,20 @@ import NodePalette from '@/components/builder/NodePalette';
 import StylePanel from '@/components/builder/StylePanel';
 import { ThemeEditor } from '@/components/builder/ThemeEditor';
 import ImageImportModal from '@/components/builder/ImageImportModal';
+
+// Type declaration for File System Access API
+declare global {
+  interface Window {
+    showOpenFilePicker?: (options?: {
+      types?: { description: string; accept: Record<string, string[]> }[];
+      multiple?: boolean;
+    }) => Promise<FileSystemFileHandle[]>;
+    showSaveFilePicker?: (options?: {
+      suggestedName?: string;
+      types?: { description: string; accept: Record<string, string[]> }[];
+    }) => Promise<FileSystemFileHandle>;
+  }
+}
 
 export default function ExperimentalSankeyPage() {
   const {
@@ -47,66 +61,12 @@ export default function ExperimentalSankeyPage() {
   // Image import modal state
   const [showImageImportModal, setShowImageImportModal] = useState(false);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger shortcuts when typing in inputs
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-        return;
-      }
+  // File handle for save-in-place functionality
+  const fileHandleRef = useRef<FileSystemFileHandle | null>(null);
+  const [loadedFileName, setLoadedFileName] = useState<string | null>(null);
 
-      switch (e.key) {
-        case 'n':
-        case 'N':
-          if (mode === 'edit') {
-            addNode();
-          }
-          break;
-        case 'c':
-        case 'C':
-          if (mode === 'edit' && !connectionMode && nodes.length >= 2) {
-            toggleConnectionMode();
-          }
-          break;
-        case 'Delete':
-        case 'Backspace':
-          if (selectedItem && mode === 'edit') {
-            e.preventDefault();
-            handleDelete();
-          }
-          break;
-        case 'Escape':
-          if (connectionMode) {
-            cancelConnection();
-          } else if (selectedItem) {
-            setSelectedItem(null);
-          }
-          break;
-        case ' ':
-          e.preventDefault();
-          setMode(mode === 'edit' ? 'preview' : 'edit');
-          break;
-        case 's':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            handleSave();
-          }
-          break;
-        case 'o':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            document.getElementById('file-input')?.click();
-          }
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [mode, nodes, selectedItem, connectionMode, addNode, toggleConnectionMode, cancelConnection, setSelectedItem, setMode]);
-
-  // Handle save
-  const handleSave = useCallback(() => {
+  // Handle save - saves to original file if loaded via File System Access API, otherwise downloads
+  const handleSave = useCallback(async () => {
     if (nodes.length === 0) {
       alert('Nothing to save! Add some nodes first.');
       return;
@@ -114,6 +74,22 @@ export default function ExperimentalSankeyPage() {
 
     const data = exportData();
     const json = JSON.stringify(data, null, 2);
+
+    // Try to save to the original file if we have a file handle
+    if (fileHandleRef.current) {
+      try {
+        const writable = await fileHandleRef.current.createWritable();
+        await writable.write(json);
+        await writable.close();
+        console.log(`Saved to ${loadedFileName}`);
+        return;
+      } catch (error) {
+        console.warn('Failed to save to original file, falling back to download:', error);
+        // Fall through to download
+      }
+    }
+
+    // Fallback: download as new file
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -121,10 +97,94 @@ export default function ExperimentalSankeyPage() {
     a.download = `sankey-flow-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [nodes.length, exportData]);
+  }, [nodes.length, exportData, loadedFileName]);
 
-  // Handle load
-  const handleLoad = useCallback(() => {
+  // Handle "Save As" - always prompts for new location
+  const handleSaveAs = useCallback(async () => {
+    if (nodes.length === 0) {
+      alert('Nothing to save! Add some nodes first.');
+      return;
+    }
+
+    const data = exportData();
+    const json = JSON.stringify(data, null, 2);
+
+    // Try to use File System Access API for save dialog
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: loadedFileName || `sankey-flow-${Date.now()}.json`,
+          types: [
+            {
+              description: 'JSON Files',
+              accept: { 'application/json': ['.json'] },
+            },
+          ],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(json);
+        await writable.close();
+        
+        // Update the file handle for future saves
+        fileHandleRef.current = handle;
+        setLoadedFileName(handle.name);
+        console.log(`Saved as ${handle.name}`);
+        return;
+      } catch (error) {
+        // User cancelled or API not available
+        if ((error as Error).name !== 'AbortError') {
+          console.warn('Save As failed:', error);
+        }
+        return;
+      }
+    }
+
+    // Fallback: download as new file
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = loadedFileName || `sankey-flow-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [nodes.length, exportData, loadedFileName]);
+
+  // Handle load - uses File System Access API if available to enable save-in-place
+  const handleLoad = useCallback(async () => {
+    // Try to use File System Access API for better UX
+    if (window.showOpenFilePicker) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [
+            {
+              description: 'JSON Files',
+              accept: { 'application/json': ['.json'] },
+            },
+          ],
+          multiple: false,
+        });
+        
+        const file = await handle.getFile();
+        const json = await file.text();
+        const data = JSON.parse(json);
+        importData(data);
+        
+        // Store the file handle for save-in-place
+        fileHandleRef.current = handle;
+        setLoadedFileName(file.name);
+        console.log(`Loaded ${file.name} - save will update this file`);
+        return;
+      } catch (error) {
+        // User cancelled or API not available
+        if ((error as Error).name !== 'AbortError') {
+          console.warn('File picker failed, falling back to input:', error);
+        } else {
+          return; // User cancelled
+        }
+      }
+    }
+
+    // Fallback: use traditional file input
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
@@ -138,6 +198,10 @@ export default function ExperimentalSankeyPage() {
           const json = event.target?.result as string;
           const data = JSON.parse(json);
           importData(data);
+          
+          // Clear file handle since we can't save back to this file
+          fileHandleRef.current = null;
+          setLoadedFileName(file.name);
         } catch (error) {
           alert('Invalid file format. Please select a valid JSON file.');
         }
@@ -180,6 +244,68 @@ export default function ExperimentalSankeyPage() {
       deleteLink(selectedItem.id);
     }
   }, [selectedItem, deleteNode, deleteLink]);
+
+  // Keyboard shortcuts - must be after all callback definitions
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in inputs
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (e.key) {
+        case 'n':
+        case 'N':
+          if (mode === 'edit') {
+            addNode();
+          }
+          break;
+        case 'c':
+        case 'C':
+          if (mode === 'edit' && !connectionMode && nodes.length >= 2) {
+            toggleConnectionMode();
+          }
+          break;
+        case 'Delete':
+        case 'Backspace':
+          if (selectedItem && mode === 'edit') {
+            e.preventDefault();
+            handleDelete();
+          }
+          break;
+        case 'Escape':
+          if (connectionMode) {
+            cancelConnection();
+          } else if (selectedItem) {
+            setSelectedItem(null);
+          }
+          break;
+        case ' ':
+          e.preventDefault();
+          setMode(mode === 'edit' ? 'preview' : 'edit');
+          break;
+        case 's':
+        case 'S':
+          if ((e.ctrlKey || e.metaKey) && e.shiftKey) {
+            e.preventDefault();
+            handleSaveAs();
+          } else if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            handleSave();
+          }
+          break;
+        case 'o':
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            handleLoad();
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mode, nodes, selectedItem, connectionMode, addNode, toggleConnectionMode, cancelConnection, setSelectedItem, setMode, handleSave, handleSaveAs, handleDelete, handleLoad]);
 
   // Handle node click
   const handleNodeClick = useCallback((nodeId: string) => {
@@ -293,9 +419,11 @@ export default function ExperimentalSankeyPage() {
         onThemeChange={updateTheme}
         onEditTheme={() => setShowThemeEditor(true)}
         onSave={handleSave}
+        onSaveAs={handleSaveAs}
         onLoad={handleLoad}
         onImportFromImage={() => setShowImageImportModal(true)}
         onClear={handleClear}
+        loadedFileName={loadedFileName}
       />
 
       {/* Main Builder Interface */}

@@ -160,19 +160,27 @@ export default function BuilderCanvas({
       const stagger = linkIndex * 60; // Offset by 60px for each link
       const gap = 30; // Gap from nodes
       // Use custom returnY if provided, otherwise calculate staggered position
-      const bottomY = link.returnY !== undefined
+      const loopY = link.returnY !== undefined
         ? link.returnY
         : Math.max(sy, ty) + 100 + stagger;
+      
+      // Determine if the loop goes above or below the connection points
+      const minConnectionY = Math.min(sy, ty);
+      const maxConnectionY = Math.max(sy, ty);
+      const isAbove = loopY < minConnectionY;
+      
+      // Use appropriate curve direction based on whether loop is above or below
+      const curveDir = isAbove ? -1 : 1; // -1 for upward curves, 1 for downward
       
       return `
         M ${sx} ${sy}
         L ${sx + gap} ${sy}
-        Q ${sx + gap + 20} ${sy} ${sx + gap + 20} ${sy + 20}
-        L ${sx + gap + 20} ${bottomY - 20}
-        Q ${sx + gap + 20} ${bottomY} ${sx + gap} ${bottomY}
-        L ${tx - gap} ${bottomY}
-        Q ${tx - gap - 20} ${bottomY} ${tx - gap - 20} ${bottomY - 20}
-        L ${tx - gap - 20} ${ty + 20}
+        Q ${sx + gap + 20} ${sy} ${sx + gap + 20} ${sy + (20 * curveDir)}
+        L ${sx + gap + 20} ${loopY - (20 * curveDir)}
+        Q ${sx + gap + 20} ${loopY} ${sx + gap} ${loopY}
+        L ${tx - gap} ${loopY}
+        Q ${tx - gap - 20} ${loopY} ${tx - gap - 20} ${loopY - (20 * curveDir)}
+        L ${tx - gap - 20} ${ty + (20 * curveDir)}
         Q ${tx - gap - 20} ${ty} ${tx - gap} ${ty}
         L ${tx} ${ty}
       `;
@@ -396,24 +404,24 @@ export default function BuilderCanvas({
       onMouseLeave={handlePanEnd}
     >
       {/* Zoom Controls */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 bg-white rounded-lg shadow-lg p-2">
+      <div className="absolute top-4 right-4 z-10 flex flex-col gap-px bg-border border border-border shadow-sm p-px">
         <button
           onClick={handleZoomIn}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded transition-colors"
+          className="w-10 h-10 flex items-center justify-center bg-card hover:bg-secondary text-foreground transition-colors"
           title="Zoom In (or use mouse wheel)"
         >
           <span className="text-xl font-bold">+</span>
         </button>
         <button
           onClick={handleZoomReset}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded transition-colors text-xs font-semibold"
+          className="w-10 h-10 flex items-center justify-center bg-card hover:bg-secondary text-foreground transition-colors text-xs font-mono font-semibold"
           title="Reset Zoom"
         >
           {Math.round(zoom * 100)}%
         </button>
         <button
           onClick={handleZoomOut}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded transition-colors"
+          className="w-10 h-10 flex items-center justify-center bg-card hover:bg-secondary text-foreground transition-colors"
           title="Zoom Out (or use mouse wheel)"
         >
           <span className="text-xl font-bold">−</span>
@@ -422,8 +430,8 @@ export default function BuilderCanvas({
 
       {/* Pan instruction */}
       {zoom > 1 && (
-        <div className="absolute bottom-4 left-4 z-10 bg-black/70 text-white px-3 py-2 rounded text-sm">
-          💡 Two-finger scroll to pan • Pinch to zoom • Hold <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-xs">Ctrl</kbd> + scroll to zoom
+        <div className="absolute bottom-4 left-4 z-10 bg-secondary/90 border border-border text-foreground px-4 py-2 text-xs font-mono backdrop-blur-sm">
+          <span className="text-primary mr-2">›</span> TWO-FINGER SCROLL TO PAN • PINCH TO ZOOM • HOLD <kbd className="bg-primary/20 px-1.5 py-0.5 text-primary border border-primary/30">CTRL</kbd> + SCROLL
         </div>
       )}
 
@@ -475,13 +483,66 @@ export default function BuilderCanvas({
               const targetNode = nodes.find(n => n.id === link.target);
               const isReverse = sourceNode && targetNode && targetNode.x < sourceNode.x + (sourceNode.width || 80);
               
+              // Generate reversed path for text labels on reverse connections
+              const generateReversedLinkPath = (link: BuilderLink, linkIndex: number): string => {
+                const source = nodes.find(n => n.id === link.source);
+                const target = nodes.find(n => n.id === link.target);
+                
+                if (!source || !target) return '';
+
+                const sx = source.x + (source.width || 80);
+                const sy = source.y + (source.height || 50) / 2;
+                const tx = target.x;
+                const ty = target.y + (target.height || 50) / 2;
+
+                // Only for reverse connections - create path in opposite direction
+                if (tx < sx) {
+                  const stagger = linkIndex * 60;
+                  const gap = 30;
+                  const loopY = link.returnY !== undefined
+                    ? link.returnY
+                    : Math.max(sy, ty) + 100 + stagger;
+                  
+                  // Determine if the loop goes above or below the connection points
+                  const minConnectionY = Math.min(sy, ty);
+                  const isAbove = loopY < minConnectionY;
+                  
+                  // Use appropriate curve direction based on whether loop is above or below
+                  const curveDir = isAbove ? -1 : 1; // -1 for upward curves, 1 for downward
+                  
+                  // Path drawn from target to source (reversed)
+                  return `
+                    M ${tx} ${ty}
+                    L ${tx - gap} ${ty}
+                    Q ${tx - gap - 20} ${ty} ${tx - gap - 20} ${ty + (20 * curveDir)}
+                    L ${tx - gap - 20} ${loopY - (20 * curveDir)}
+                    Q ${tx - gap - 20} ${loopY} ${tx - gap} ${loopY}
+                    L ${sx + gap} ${loopY}
+                    Q ${sx + gap + 20} ${loopY} ${sx + gap + 20} ${loopY - (20 * curveDir)}
+                    L ${sx + gap + 20} ${sy + (20 * curveDir)}
+                    Q ${sx + gap + 20} ${sy} ${sx + gap} ${sy}
+                    L ${sx} ${sy}
+                  `;
+                }
+                return '';
+              };
+              
               return (
-                <path
-                  key={`path-def-${link.id}`}
-                  id={`link-path-${link.id}`}
-                  d={generateLinkPath(link, index)}
-                  fill="none"
-                />
+                <g key={`path-defs-${link.id}`}>
+                  <path
+                    id={`link-path-${link.id}`}
+                    d={generateLinkPath(link, index)}
+                    fill="none"
+                  />
+                  {/* Reversed path for text labels on reverse connections */}
+                  {isReverse && (
+                    <path
+                      id={`link-path-${link.id}-reversed`}
+                      d={generateReversedLinkPath(link, index)}
+                      fill="none"
+                    />
+                  )}
+                </g>
               );
             })}
           </defs>
@@ -521,8 +582,8 @@ export default function BuilderCanvas({
                     className="pointer-events-none select-none"
                   >
                     <textPath
-                      href={`#link-path-${link.id}`}
-                      startOffset={isReverse ? "15%" : "50%"}
+                      href={isReverse ? `#link-path-${link.id}-reversed` : `#link-path-${link.id}`}
+                      startOffset="50%"
                       textAnchor="middle"
                       style={{
                         paintOrder: 'stroke',
@@ -561,40 +622,62 @@ export default function BuilderCanvas({
                   }
                   
                   return useIcon && iconPath ? (
-                    <image
+                    <g
                       key={`particle-${link.id}-${dotIndex}`}
-                      href={iconPath}
-                      width={particleSize * 4}
-                      height={particleSize * 4}
-                      x={-particleSize * 2}
-                      y={-particleSize * 2}
-                      opacity="0.9"
                       className="pointer-events-none"
+                      style={{ opacity: 0 }}
                     >
+                      <image
+                        href={iconPath}
+                        width={particleSize * 4}
+                        height={particleSize * 4}
+                        x={-particleSize * 2}
+                        y={-particleSize * 2}
+                      />
                       <animateMotion
                         dur={`${duration}s`}
                         repeatCount="indefinite"
                         begin={`${delay}s`}
+                        fill="freeze"
                       >
                         <mpath href={`#link-path-${link.id}`} />
                       </animateMotion>
-                    </image>
+                      <animate
+                        attributeName="opacity"
+                        from="0"
+                        to="0.9"
+                        dur="0.01s"
+                        begin={`${delay}s`}
+                        fill="freeze"
+                      />
+                    </g>
                   ) : (
-                    <circle
+                    <g
                       key={`dot-${link.id}-${dotIndex}`}
-                      r={particleSize}
-                      fill={link.color}
-                      opacity="0.8"
                       className="pointer-events-none"
+                      style={{ opacity: 0 }}
                     >
+                      <circle
+                        r={particleSize}
+                        fill={link.color}
+                      />
                       <animateMotion
                         dur={`${duration}s`}
                         repeatCount="indefinite"
                         begin={`${delay}s`}
+                        fill="freeze"
                       >
                         <mpath href={`#link-path-${link.id}`} />
                       </animateMotion>
-                    </circle>
+                      <animate
+                        attributeName="opacity"
+                        from="0"
+                        to="0.8"
+                        dur="0.01s"
+                        begin={`${delay}s`}
+                        fill="freeze"
+                      />
+                    </g>
                   );
                 })}
                 
@@ -758,9 +841,10 @@ export default function BuilderCanvas({
                 const lines = node.name.split(/<br\s*\/?>/i);
                 const fontSize = node.fontSize || theme.defaults.node.fontSize || 12;
                 const lineHeight = fontSize * 1.2;
-                const yBase = node.iconOnly ? (node.height || 50) + 15 : (node.icon ? (node.height || 50) - 10 : (node.height || 50) / 2);
-                // Adjust y position to center multi-line text
-                const yOffset = lines.length > 1 ? -((lines.length - 1) * lineHeight) / 2 : 0;
+                const labelOffset = node.labelOffset || 0; // User-adjustable offset
+                const yBase = node.iconOnly ? (node.height || 50) : (node.icon ? (node.height || 50) - 10 : (node.height || 50) / 2);
+                // Adjust y position to center multi-line text, plus user offset
+                const yOffset = (lines.length > 1 ? -((lines.length - 1) * lineHeight) / 2 : 0) + labelOffset;
                 
                 return (
                   <text
@@ -807,32 +891,32 @@ export default function BuilderCanvas({
       {/* Empty state */}
       {nodes.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🎨</div>
-            <div className="text-xl font-semibold mb-2">Start Building Your Flow</div>
-            <div className="text-sm">Click "Add Node" to create your first node</div>
+          <div className="text-center p-8 border border-dashed border-border bg-secondary/5">
+            <div className="text-6xl mb-6 text-primary/20">❖</div>
+            <div className="text-xl font-bold mb-2 text-foreground uppercase tracking-wide">System Initialization</div>
+            <div className="text-sm text-muted-foreground font-mono">ADD NODES TO BEGIN CONFIGURATION</div>
           </div>
         </div>
       )}
 
       {/* Connection mode hint */}
       {isDrawingConnection && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-2">
-            <span>🔗</span>
-            <span className="font-semibold">
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground px-6 py-3 shadow-lg border border-primary-foreground/20">
+          <div className="flex items-center space-x-4">
+            <span className="animate-pulse">⚡</span>
+            <span className="font-bold font-mono text-sm uppercase tracking-wide">
               {!connectionStart
-                ? 'Click source node to start connection'
-                : 'Click target node to complete connection'}
+                ? 'Select Source Node'
+                : 'Select Target Node'}
             </span>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onCanvasClick();
               }}
-              className="ml-4 text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded"
+              className="ml-4 text-xs bg-black/20 hover:bg-black/30 px-3 py-1 font-mono uppercase"
             >
-              Cancel (Esc)
+              Abort [ESC]
             </button>
           </div>
         </div>

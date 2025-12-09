@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import * as d3 from 'd3';
 import IconTooltip from '@/components/ui/IconTooltip';
 
@@ -55,21 +56,57 @@ interface CircularSankeyHomepageProps {
   diagramData: DiagramData;
   width?: number;
   height?: number;
+  enableNavigation?: boolean; // New prop to enable/disable click navigation
+  uniqueId?: string; // Optional ID to scope SVG definitions and paths
 }
+
+// Mapping of node IDs to component detail page slugs
+const NODE_TO_COMPONENT_MAP: Record<string, string> = {
+  'farm': 'farm',
+  'farms': 'farm',
+  'chicken-house': 'chicken-house',
+  'chicken-houses': 'chicken-house',
+  'processing-plant': 'processing-plant',
+  'waterways': 'waterways',
+  'farm-waterways': 'waterways',
+  'anaerobic-digester': 'anaerobic-digester',
+  'pyrolysis-unit': 'pyrolysis-unit',
+  'pyrolysis': 'pyrolysis-unit'
+};
 
 export function CircularSankeyHomepage({
   diagramData,
-  width = 850,
-  height = 700
+  width: initialWidth = 850,
+  height = 700,
+  enableNavigation = true,
+  uniqueId = 'default'
 }: CircularSankeyHomepageProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(initialWidth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0) {
+          setWidth(entry.contentRect.width);
+        }
+      }
+    });
+    
+    resizeObserver.observe(containerRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
   
   // Tooltip state
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [tooltipIconPath, setTooltipIconPath] = useState<string | undefined>();
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [tooltipContext, setTooltipContext] = useState<'current' | 'proposed'>('current');
+  const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
 
   useEffect(() => {
     if (!svgRef.current || !diagramData) return;
@@ -83,15 +120,14 @@ export function CircularSankeyHomepage({
 
     const svg = d3.select(svgRef.current);
     
-    // Create main group with transform
+    // Create main group (centering will be applied after rendering)
     const g = svg.append('g')
-      .attr('class', 'diagram-group')
-      .attr('transform', 'translate(0, -50)'); // Shift up slightly
+      .attr('class', 'diagram-group');
 
     // Create node map for quick lookup
     const nodeMap = new Map(diagramData.nodes.map(node => [node.id, node]));
 
-    // Generate link path (matching BuilderCanvas logic)
+    // Generate link path (matching BuilderCanvas logic with circular support)
     const generateLinkPath = (link: DiagramLink, linkIndex: number): string => {
       const sourceNode = nodeMap.get(link.source);
       const targetNode = nodeMap.get(link.target);
@@ -103,6 +139,31 @@ export function CircularSankeyHomepage({
       const tx = targetNode.x;
       const ty = targetNode.y + targetNode.height / 2;
 
+      // Check if this is a reverse connection (target is left of source)
+      if (tx < sx) {
+        // Calculate stagger to prevent overlaps - each link gets its own offset
+        const stagger = linkIndex * 60; // Offset by 60px for each link
+        const gap = 30; // Gap from nodes
+        // Use custom returnY if provided, otherwise calculate staggered position
+        const returnY = (link as any).returnY;
+        const bottomY = returnY !== undefined
+          ? returnY
+          : Math.max(sy, ty) + 100 + stagger;
+        
+        return `
+          M ${sx} ${sy}
+          L ${sx + gap} ${sy}
+          Q ${sx + gap + 20} ${sy} ${sx + gap + 20} ${sy + 20}
+          L ${sx + gap + 20} ${bottomY - 20}
+          Q ${sx + gap + 20} ${bottomY} ${sx + gap} ${bottomY}
+          L ${tx - gap} ${bottomY}
+          Q ${tx - gap - 20} ${bottomY} ${tx - gap - 20} ${bottomY - 20}
+          L ${tx - gap - 20} ${ty + 20}
+          Q ${tx - gap - 20} ${ty} ${tx - gap} ${ty}
+          L ${tx} ${ty}
+        `;
+      }
+
       // Forward connection: use cubic Bezier curve for natural S-curves
       const midX = (sx + tx) / 2;
       return `M ${sx} ${sy} C ${midX} ${sy}, ${midX} ${ty}, ${tx} ${ty}`;
@@ -112,7 +173,7 @@ export function CircularSankeyHomepage({
     const defs = g.append('defs');
     diagramData.links.forEach((link, index) => {
       defs.append('path')
-        .attr('id', `link-path-${link.id}`)
+        .attr('id', `${uniqueId}-link-path-${link.id}`)
         .attr('d', generateLinkPath(link, index))
         .attr('fill', 'none');
     });
@@ -135,8 +196,12 @@ export function CircularSankeyHomepage({
         .attr('stroke', link.color)
         .attr('stroke-width', link.value || 4) // Use link.value for width
         .attr('fill', 'none')
-        .attr('opacity', 0.6)
-        .attr('stroke-linecap', 'round');
+        .attr('opacity', highlightedNode
+          ? (highlightedNode === link.source || highlightedNode === link.target ? 0.8 : 0.1)
+          : 0.6)
+        .attr('stroke-linecap', 'round')
+        .attr('class', 'link-path') // Add class for selection
+        .style('transition', 'opacity 0.3s ease');
 
       // Add link label following the path
       if (link.label) {
@@ -146,7 +211,7 @@ export function CircularSankeyHomepage({
           .attr('font-weight', '600')
           .attr('class', 'pointer-events-none select-none')
           .append('textPath')
-          .attr('href', `#link-path-${link.id}`)
+          .attr('href', `#${uniqueId}-link-path-${link.id}`)
           .attr('startOffset', '50%')
           .attr('text-anchor', 'middle')
           .style('paint-order', 'stroke')
@@ -167,48 +232,39 @@ export function CircularSankeyHomepage({
         const useIcon = link.particleIcon || (link.particleIconSource && link.particleIconSource !== 'dot');
         const iconPath = link.particleIcon || (useIcon ? link.particleIconSource : undefined);
 
+        // Get the path element to calculate length for animation
+        // Use the scoped ID to ensure we get the correct path for this diagram instance
+        const pathElement = document.getElementById(`${uniqueId}-link-path-${link.id}`) as unknown as SVGPathElement;
+        const pathLength = pathElement?.getTotalLength() || 0;
+
         for (let i = 0; i < particleCount; i++) {
           const delay = (i / particleCount) * duration;
           
           if (useIcon && iconPath) {
-            // Create icon particle (source and target nodes are guaranteed to exist here)
-            if (!sourceNode || !targetNode) continue;
-            
+            // Create icon particle using path-following animation
             const icon = linkGroup.append('image')
               .attr('href', iconPath)
-              .attr('width', particleSize * 2)
-              .attr('height', particleSize * 2)
-              .attr('x', -particleSize)
-              .attr('y', -particleSize)
-              .attr('opacity', 0.8);
+              .attr('width', particleSize * 4)
+              .attr('height', particleSize * 4)
+              .attr('x', -particleSize * 2)
+              .attr('y', -particleSize * 2)
+              .attr('opacity', highlightedNode
+                ? (highlightedNode === link.source || highlightedNode === link.target ? 1 : 0.1)
+                : 0.8)
+              .attr('class', 'link-particle') // Add class for selection
+              .style('transition', 'opacity 0.3s ease');
 
-            // Capture node positions in closure
-            const sx = sourceNode.x + sourceNode.width;
-            const sy = sourceNode.y + sourceNode.height / 2;
-            const tx = targetNode.x;
-            const ty = targetNode.y + targetNode.height / 2;
-
+            // Animate along the path using D3 transition with path length
             function animateIcon() {
-              icon
-                .attr('transform', `translate(${sx},${sy})`)
-                .transition()
+              icon.transition()
                 .duration(duration * 1000)
                 .ease(d3.easeLinear)
                 .delay(delay * 1000)
                 .attrTween('transform', function() {
                   return function(t) {
-                    // Calculate position along cubic Bezier curve
-                    const midX = (sx + tx) / 2;
-                    
-                    const x = Math.pow(1-t, 3) * sx + 
-                             3 * Math.pow(1-t, 2) * t * midX + 
-                             3 * (1-t) * Math.pow(t, 2) * midX + 
-                             Math.pow(t, 3) * tx;
-                    const y = Math.pow(1-t, 3) * sy + 
-                             3 * Math.pow(1-t, 2) * t * sy + 
-                             3 * (1-t) * Math.pow(t, 2) * ty + 
-                             Math.pow(t, 3) * ty;
-                    return `translate(${x},${y})`;
+                    if (!pathElement) return `translate(0,0)`;
+                    const point = pathElement.getPointAtLength(t * pathLength);
+                    return `translate(${point.x},${point.y})`;
                   };
                 })
                 .on('end', animateIcon);
@@ -216,40 +272,27 @@ export function CircularSankeyHomepage({
 
             animateIcon();
           } else {
-            // Create circle particle (source and target nodes are guaranteed to exist here)
-            if (!sourceNode || !targetNode) continue;
-            
+            // Create circle particle using path-following animation
             const circle = linkGroup.append('circle')
               .attr('r', particleSize)
               .attr('fill', link.color)
-              .attr('opacity', 0.8);
+              .attr('opacity', highlightedNode
+                ? (highlightedNode === link.source || highlightedNode === link.target ? 1 : 0.1)
+                : 0.8)
+              .attr('class', 'link-particle') // Add class for selection
+              .style('transition', 'opacity 0.3s ease');
 
-            // Capture node positions in closure
-            const sx = sourceNode.x + sourceNode.width;
-            const sy = sourceNode.y + sourceNode.height / 2;
-            const tx = targetNode.x;
-            const ty = targetNode.y + targetNode.height / 2;
-
+            // Animate along the path using D3 transition with path length
             function animate() {
-              circle
-                .attr('transform', `translate(${sx},${sy})`)
-                .transition()
+              circle.transition()
                 .duration(duration * 1000)
                 .ease(d3.easeLinear)
                 .delay(delay * 1000)
                 .attrTween('transform', function() {
                   return function(t) {
-                    const midX = (sx + tx) / 2;
-                    
-                    const x = Math.pow(1-t, 3) * sx + 
-                             3 * Math.pow(1-t, 2) * t * midX + 
-                             3 * (1-t) * Math.pow(t, 2) * midX + 
-                             Math.pow(t, 3) * tx;
-                    const y = Math.pow(1-t, 3) * sy + 
-                             3 * Math.pow(1-t, 2) * t * sy + 
-                             3 * (1-t) * Math.pow(t, 2) * ty + 
-                             Math.pow(t, 3) * ty;
-                    return `translate(${x},${y})`;
+                    if (!pathElement) return `translate(0,0)`;
+                    const point = pathElement.getPointAtLength(t * pathLength);
+                    return `translate(${point.x},${point.y})`;
                   };
                 })
                 .on('end', animate);
@@ -265,9 +308,17 @@ export function CircularSankeyHomepage({
     const nodesGroup = g.append('g').attr('class', 'nodes');
     
     diagramData.nodes.forEach(node => {
+      // Check if node is connected to highlighted node
+      const isConnected = highlightedNode
+        ? node.id === highlightedNode ||
+          diagramData.links.some(l => (l.source === highlightedNode && l.target === node.id) || (l.target === highlightedNode && l.source === node.id))
+        : true;
+
       const nodeGroup = nodesGroup.append('g')
         .attr('class', 'node')
-        .attr('transform', `translate(${node.x},${node.y})`);
+        .attr('transform', `translate(${node.x},${node.y})`)
+        .attr('opacity', isConnected ? 1 : 0.2)
+        .style('transition', 'opacity 0.3s ease');
 
       // Add icon
       nodeGroup.append('image')
@@ -303,7 +354,7 @@ export function CircularSankeyHomepage({
         });
       }
 
-      // Add hover effects and tooltip
+      // Add hover effects, tooltip, and click navigation
       nodeGroup
         .style('cursor', 'pointer')
         .on('mouseenter', function(event) {
@@ -312,6 +363,8 @@ export function CircularSankeyHomepage({
             .duration(200)
             .attr('transform', `translate(${node.x},${node.y}) scale(1.05)`);
           
+          setHighlightedNode(node.id);
+
           // Show tooltip
           if (node.icon) {
             setTooltipIconPath(node.icon);
@@ -330,26 +383,66 @@ export function CircularSankeyHomepage({
             .duration(200)
             .attr('transform', `translate(${node.x},${node.y}) scale(1)`);
           
+          setHighlightedNode(null);
+
           // Hide tooltip
           setTooltipVisible(false);
+        })
+        .on('click', function(event) {
+          event.stopPropagation();
+          
+          // Only navigate if enableNavigation is true
+          if (!enableNavigation) return;
+          
+          // Try to find a matching component slug from the node ID
+          const nodeId = node.id.toLowerCase();
+          const componentSlug = NODE_TO_COMPONENT_MAP[nodeId];
+          
+          if (componentSlug) {
+            router.push(`/details/${componentSlug}`);
+          } else {
+            // Try partial matching for node IDs that contain component names
+            for (const [key, slug] of Object.entries(NODE_TO_COMPONENT_MAP)) {
+              if (nodeId.includes(key) || key.includes(nodeId)) {
+                router.push(`/details/${slug}`);
+                return;
+              }
+            }
+            console.log(`No detail page found for node: ${node.id}`);
+          }
         });
     });
 
-    // Center the diagram
+    // Center and scale the diagram to fill available space
     const bbox = g.node()?.getBBox();
     if (bbox) {
-      const scale = Math.min(
-        width / (bbox.width + 40),
-        height / (bbox.height + 40),
-        1
-      );
-      const translateX = (width - bbox.width * scale) / 2 - bbox.x * scale;
-      const translateY = (height - bbox.height * scale) / 2 - bbox.y * scale;
+      // Calculate scale to fit within bounds with minimal padding
+      const padding = 40;
+      const scaleX = (width - padding) / bbox.width;
+      const scaleY = (height - padding) / bbox.height;
+      const scale = Math.min(scaleX, scaleY);
+      
+      // Debug logging
+      console.log('CircularSankeyHomepage scaling:', {
+        width,
+        height,
+        bboxWidth: bbox.width,
+        bboxHeight: bbox.height,
+        scaleX,
+        scaleY,
+        finalScale: scale
+      });
+      
+      // Calculate center position accounting for bbox offset
+      const scaledWidth = bbox.width * scale;
+      const scaledHeight = bbox.height * scale;
+      const translateX = (width - scaledWidth) / 2 - bbox.x * scale;
+      const translateY = (height - scaledHeight) / 2 - bbox.y * scale;
       
       g.attr('transform', `translate(${translateX},${translateY}) scale(${scale})`);
     }
 
-  }, [diagramData, width, height]);
+  }, [diagramData, width, height, highlightedNode]);
 
   return (
     <div ref={containerRef} className="w-full relative" style={{ height: `${height}px` }}>

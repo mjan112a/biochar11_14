@@ -38,7 +38,7 @@
       "y": 400,
       "width": 80,
       "height": 80,
-      "color": "#065F46",
+      "color": "#16A34A",
       "icon": "/images/iconslibrary/biochar-01.svg",
       "iconOnly": true,
       "showLabel": true
@@ -62,7 +62,7 @@
       "y": 620,
       "width": 80,
       "height": 80,
-      "color": "#10B981",
+      "color": "#34D399",
       "icon": "/images/iconslibrary/syngas-energy-01.svg",
       "iconOnly": true,
       "showLabel": true
@@ -98,7 +98,7 @@
       "y": 350,
       "width": 80,
       "height": 80,
-      "color": "#78350F",
+      "color": "#B45309",
       "icon": "/images/iconslibrary/litter-char-from-chicken-house-01.svg",
       "iconOnly": true,
       "showLabel": true
@@ -110,7 +110,7 @@
       "y": 500,
       "width": 80,
       "height": 80,
-      "color": "#991B1B",
+      "color": "#EF4444",
       "icon": "/images/iconslibrary/dead-chickens-01.svg",
       "iconOnly": true,
       "showLabel": true
@@ -122,7 +122,7 @@
       "y": 650,
       "width": 80,
       "height": 80,
-      "color": "#10B981",
+      "color": "#34D399",
       "icon": "/images/iconslibrary/GHG-01.svg",
       "iconOnly": true,
       "showLabel": true
@@ -156,10 +156,10 @@
       "source": "biochar-bedding",
       "target": "chicken-house-main",
       "value": 10,
-      "color": "#065F46",
+      "color": "#16A34A",
       "label": "150 kg",
-      "animationFrequency": 2,
-      "animationRate": 3,
+      "animationFrequency": 3,
+      "animationRate": 6,
       "animationSize": 4
     },
     {
@@ -178,11 +178,11 @@
       "source": "renewable-energy",
       "target": "chicken-house-main",
       "value": 8,
-      "color": "#10B981",
+      "color": "#34D399",
       "label": "800 kWh",
-      "animationFrequency": 2,
-      "animationRate": 5,
-      "animationSize": 4
+      "animationFrequency": 4,
+      "animationRate": 8,
+      "animationSize": 5
     },
     {
       "id": "link-6",
@@ -200,10 +200,10 @@
       "source": "chicken-house-main",
       "target": "litter-char-mix",
       "value": 14,
-      "color": "#78350F",
+      "color": "#B45309",
       "label": "450 kg",
-      "animationFrequency": 2,
-      "animationRate": 4,
+      "animationFrequency": 3,
+      "animationRate": 5,
       "animationSize": 4
     },
     {
@@ -211,7 +211,7 @@
       "source": "chicken-house-main",
       "target": "dead-chickens",
       "value": 6,
-      "color": "#991B1B",
+      "color": "#EF4444",
       "label": "50 birds",
       "animationFrequency": 1,
       "animationRate": 3,
@@ -222,11 +222,11 @@
       "source": "chicken-house-main",
       "target": "reduced-emissions",
       "value": 6,
-      "color": "#10B981",
+      "color": "#34D399",
       "label": "80 kg CO₂",
       "animationFrequency": 1,
       "animationRate": 3,
-      "animationSize": 4
+      "animationSize": 3
     }
   ],
   "config": {

@@ -156,11 +156,11 @@
       "source": "renewable-energy",
       "target": "processing-plant-main",
       "value": 12,
-      "color": "#10B981",
+      "color": "#34D399",
       "label": "1,200 kWh",
-      "animationFrequency": 2,
-      "animationRate": 5,
-      "animationSize": 4
+      "animationFrequency": 4,
+      "animationRate": 7,
+      "animationSize": 5
     },
     {
       "id": "link-4",
@@ -191,8 +191,8 @@
       "value": 12,
       "color": "#8B5CF6",
       "label": "200 kg",
-      "animationFrequency": 2,
-      "animationRate": 4,
+      "animationFrequency": 3,
+      "animationRate": 5,
       "animationSize": 4
     },
     {
@@ -200,10 +200,10 @@
       "source": "processing-plant-main",
       "target": "dead-to-ad",
       "value": 8,
-      "color": "#991B1B",
+      "color": "#B45309",
       "label": "50 birds",
-      "animationFrequency": 1,
-      "animationRate": 3,
+      "animationFrequency": 3,
+      "animationRate": 5,
       "animationSize": 4
     },
     {
@@ -211,10 +211,10 @@
       "source": "processing-plant-main",
       "target": "clean-water",
       "value": 14,
-      "color": "#14B8A6",
+      "color": "#22D3EE",
       "label": "1,800 L",
-      "animationFrequency": 2,
-      "animationRate": 4,
+      "animationFrequency": 3,
+      "animationRate": 6,
       "animationSize": 4
     },
     {
@@ -222,10 +222,10 @@
       "source": "processing-plant-main",
       "target": "reduced-ghg",
       "value": 6,
-      "color": "#10B981",
+      "color": "#34D399",
       "label": "90 kg CO₂",
       "animationFrequency": 1,
-      "animationRate": 3,
+      "animationRate": 4,
       "animationSize": 4
     }
   ],

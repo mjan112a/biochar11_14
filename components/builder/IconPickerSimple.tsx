@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface IconInfo {
   name: string;
@@ -16,12 +16,6 @@ interface IconPickerProps {
   onClose: () => void;
 }
 
-/**
- * Simplified IconPicker with Auto-Discovery
- * 
- * Just drop SVG files in public/images/iconslibrary/ and they automatically appear!
- * No JSON editing required.
- */
 export default function IconPickerSimple({
   isOpen,
   currentIcon,
@@ -31,6 +25,9 @@ export default function IconPickerSimple({
   const [icons, setIcons] = useState<IconInfo[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load icons from auto-discovery API
   useEffect(() => {
@@ -54,6 +51,61 @@ export default function IconPickerSimple({
       console.error('Failed to load icons:', error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/icons/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error('Upload response error:', response.status, text);
+        setUploadError(`Server error: ${response.status} - ${text || 'Unknown error'}`);
+        return;
+      }
+
+      const text = await response.text();
+      if (!text) {
+        setUploadError('Empty response from server');
+        return;
+      }
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError, 'Response:', text);
+        setUploadError('Invalid server response');
+        return;
+      }
+
+      if (data.success) {
+        await loadIcons();
+        setSearchTerm('');
+      } else {
+        setUploadError(data.error || 'Upload failed');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploadError('Failed to upload icon: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   }
 
@@ -98,14 +150,48 @@ export default function IconPickerSimple({
                 {icons.length} icons available • Auto-discovered from iconslibrary/
               </p>
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
-              title="Close"
-            >
-              ×
-            </button>
+            <div className="flex items-center gap-2">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".svg"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium text-sm flex items-center gap-2 disabled:opacity-50"
+                title="Upload new icon"
+              >
+                {uploading ? (
+                  <>
+                    <span className="animate-spin">⏳</span>
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <span>➕</span>
+                    Add Icon
+                  </>
+                )}
+              </button>
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-600 text-2xl leading-none px-2"
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
           </div>
+          
+          {uploadError && (
+            <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center justify-between">
+              <span>❌ {uploadError}</span>
+              <button onClick={() => setUploadError(null)} className="text-red-500 hover:text-red-700">×</button>
+            </div>
+          )}
           
           {/* Search */}
           <input

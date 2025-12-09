@@ -15,6 +15,7 @@ export interface BuilderNode {
   iconOnly?: boolean;  // If true, shows only icon without background/border
   showLabel?: boolean; // If false, hides the text label (default: true)
   fontSize?: number;   // Label font size in pixels (default: 12)
+  labelOffset?: number; // Vertical offset for label below icon in pixels (default: 0)
 }
 
 export interface BuilderLink {
@@ -41,12 +42,26 @@ export interface BuilderLink {
   circular?: boolean;
 }
 
+export interface BoundaryCircle {
+  id: string;
+  name: string;  // Label for the boundary
+  centerX: number;  // Center X coordinate
+  centerY: number;  // Center Y coordinate
+  radius: number;   // Radius of the circle
+  color?: string;   // Stroke color (default: gray)
+  strokeWidth?: number;  // Line width (default: 2)
+  strokeDasharray?: string;  // Dash pattern (default: "5,5" for dotted)
+  opacity?: number;  // Opacity (default: 0.5)
+  showLabel?: boolean;  // Show label (default: true)
+}
+
 export interface DiagramConfig {
   width: number;
   height: number;
   nodePadding: number;
   nodeWidth: number;
   circularLinkGap: number;
+  boundaryCircles?: BoundaryCircle[];  // Optional boundary circles
 }
 
 export interface DiagramData {
