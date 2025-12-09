@@ -64,10 +64,20 @@ export interface DiagramConfig {
   boundaryCircles?: BoundaryCircle[];  // Optional boundary circles
 }
 
+export interface DiagramMetadata {
+  title?: string;
+  description?: string;
+  type?: string;           // 'overview', 'detail', etc.
+  system?: string;         // 'current', 'proposed' - IMPORTANT for tooltips
+  created?: string;
+  lastModified?: string;
+}
+
 export interface DiagramData {
   nodes: BuilderNode[];
   links: BuilderLink[];
   config: DiagramConfig;
+  metadata?: DiagramMetadata;  // Preserve metadata for tooltip context
 }
 
 export type EditorMode = 'edit' | 'preview';

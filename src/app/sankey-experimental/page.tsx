@@ -53,6 +53,7 @@ export default function ExperimentalSankeyPage() {
     importData,
     clearAll,
     updateTheme,
+    metadata,
   } = useBuilderState();
 
   // Theme editor state
@@ -424,6 +425,7 @@ export default function ExperimentalSankeyPage() {
         onImportFromImage={() => setShowImageImportModal(true)}
         onClear={handleClear}
         loadedFileName={loadedFileName}
+        metadata={metadata}
       />
 
       {/* Main Builder Interface */}

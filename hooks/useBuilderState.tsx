@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { BuilderNode, BuilderLink, EditorMode, SelectedItem, DiagramData, DiagramConfig } from '@/types/builder';
+import { BuilderNode, BuilderLink, EditorMode, SelectedItem, DiagramData, DiagramConfig, DiagramMetadata } from '@/types/builder';
 import { DiagramTheme } from '@/types/builder-theme';
 import { defaultTheme } from '@/lib/themePresets';
 
@@ -22,6 +22,7 @@ export function useBuilderState() {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [config, setConfig] = useState<DiagramConfig>(DEFAULT_CONFIG);
   const [currentTheme, setCurrentTheme] = useState<DiagramTheme>(defaultTheme);
+  const [metadata, setMetadata] = useState<DiagramMetadata | undefined>(undefined);
 
   // Generate unique ID
   const generateId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -141,16 +142,26 @@ export function useBuilderState() {
     return null;
   }, [selectedItem, links]);
 
-  // Export diagram data
+  // Export diagram data - preserves metadata for tooltip context!
   const exportData = useCallback((): DiagramData => {
-    return { nodes, links, config };
-  }, [nodes, links, config]);
+    const data: DiagramData = { nodes, links, config };
+    if (metadata) {
+      // Update lastModified timestamp
+      data.metadata = {
+        ...metadata,
+        lastModified: new Date().toISOString().split('T')[0]
+      };
+    }
+    return data;
+  }, [nodes, links, config, metadata]);
 
-  // Import diagram data
+  // Import diagram data - preserves metadata for tooltip context!
   const importData = useCallback((data: DiagramData) => {
     setNodes(data.nodes);
     setLinks(data.links);
     setConfig(data.config || DEFAULT_CONFIG);
+    // IMPORTANT: Preserve metadata so tooltips know current vs proposed context
+    setMetadata(data.metadata);
     setSelectedItem(null);
     setConnectionMode(false);
     setConnectionStart(null);
@@ -160,9 +171,15 @@ export function useBuilderState() {
   const clearAll = useCallback(() => {
     setNodes([]);
     setLinks([]);
+    setMetadata(undefined);
     setSelectedItem(null);
     setConnectionMode(false);
     setConnectionStart(null);
+  }, []);
+
+  // Update metadata
+  const updateMetadata = useCallback((updates: Partial<DiagramMetadata>) => {
+    setMetadata(prev => prev ? { ...prev, ...updates } : updates);
   }, []);
 
   // Update current theme
@@ -180,6 +197,7 @@ export function useBuilderState() {
     connectionStart,
     config,
     currentTheme,
+    metadata,
     
     // Actions
     setMode,
@@ -199,5 +217,6 @@ export function useBuilderState() {
     importData,
     clearAll,
     updateTheme,
+    updateMetadata,
   };
 }

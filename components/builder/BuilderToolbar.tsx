@@ -1,6 +1,6 @@
 'use client';
 
-import { EditorMode } from '@/types/builder';
+import { EditorMode, DiagramMetadata } from '@/types/builder';
 import { DiagramTheme } from '@/types/builder-theme';
 import { ThemeSelector } from './ThemeSelector';
 
@@ -16,6 +16,7 @@ interface BuilderToolbarProps {
   onImportFromImage: () => void;
   onClear: () => void;
   loadedFileName?: string | null;
+  metadata?: DiagramMetadata;
 }
 
 export default function BuilderToolbar({
@@ -30,6 +31,7 @@ export default function BuilderToolbar({
   onImportFromImage,
   onClear,
   loadedFileName,
+  metadata,
 }: BuilderToolbarProps) {
   return (
     <div className="bg-card border-b border-border px-6 py-4 shadow-sm">
@@ -79,6 +81,21 @@ export default function BuilderToolbar({
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-3">
+          {/* Show system type badge (current/proposed) - IMPORTANT for tooltips! */}
+          {metadata?.system && (
+            <div
+              className={`flex items-center px-3 py-1.5 border text-xs font-mono font-bold uppercase ${
+                metadata.system === 'proposed'
+                  ? 'bg-green-900/30 border-green-500/50 text-green-400'
+                  : 'bg-blue-900/30 border-blue-500/50 text-blue-400'
+              }`}
+              title={`This diagram is marked as "${metadata.system}" system - tooltips will show ${metadata.system === 'proposed' ? 'improvements' : 'problems'}`}
+            >
+              <span className="mr-1">{metadata.system === 'proposed' ? '✨' : '📊'}</span>
+              <span>{metadata.system}</span>
+            </div>
+          )}
+          
           {/* Show loaded filename if available */}
           {loadedFileName && (
             <div className="flex items-center px-3 py-1.5 bg-secondary/50 border border-border text-muted-foreground text-xs font-mono">
