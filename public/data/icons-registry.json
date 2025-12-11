@@ -34,6 +34,12 @@
           "tooltip": "pyrolysis-unit-01"
         },
         {
+          "name": "Pyrolysis Unit v3",
+          "file": "pyrolysis-unit-03.svg",
+          "keywords": "pyrolysis, unit, biochar, thermal, v3",
+          "tooltip": "pyrolysis-unit-03"
+        },
+        {
           "name": "Farm Waterways",
           "file": "farm-waterways-01.svg",
           "keywords": "farm, waterways, field, agriculture, land"
